@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-11 12:25:45
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 19:10:31
+# @LastEditTime : 2020-11-08 20:11:13
 # @Description  : 网络请求模块
 '''
 import re
@@ -19,7 +19,7 @@ logger = get_logger('Net')
 
 
 async def adv_http_get(client: AsyncClient, url: str, params: dict = None,
-                       headers: dict = HEADERS, retrys: int = 3) -> Response:
+                       headers: dict = None, retrys: int = 3) -> Response:
     '''
     出错自动重试的请求器
 
@@ -32,6 +32,8 @@ async def adv_http_get(client: AsyncClient, url: str, params: dict = None,
     返回:
         Response: 请求结果
     '''
+    if not headers :
+        headers=HEADERS
     for _ in range(0, retrys):
         try:
             resp = await client.get(url=url, params=params, headers=headers,timeout=TIMEOUT)
@@ -51,7 +53,7 @@ async def adv_http_get(client: AsyncClient, url: str, params: dict = None,
 
 
 async def adv_http_get_keylol(client: AsyncClient, url: str, params: dict = None,
-                              headers: dict = HEADERS, retrys: int = 3) -> Response:
+                              headers: dict = None, retrys: int = 3) -> Response:
     '''
     出错自动重试的请求器
 
@@ -64,6 +66,8 @@ async def adv_http_get_keylol(client: AsyncClient, url: str, params: dict = None
     返回:
         Response: 请求结果
     '''
+    if not headers :
+        headers=HEADERS
     for _ in range(0, retrys):
         try:
             resp = await client.get(url=url, params=params, headers=headers,timeout=TIMEOUT)
@@ -73,7 +77,7 @@ async def adv_http_get_keylol(client: AsyncClient, url: str, params: dict = None
             jd = json.loads(matchobj.group(1))
             await asyncio.sleep(TREAD_CD)
             return (jd)
-        except Exception as e:
+        except Exception:
             if _ == 0:
                 logger.debug('网络错误,暂停15秒')
                 await asyncio.sleep(15)

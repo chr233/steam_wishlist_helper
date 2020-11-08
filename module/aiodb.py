@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 10:42:53
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-07 17:48:23
+# @LastEditTime : 2020-11-08 20:12:14
 # @Description  : 读写缓存数据库
 '''
 
@@ -41,7 +41,7 @@ async def init_db(conn: Connection, drop_if_exist: bool = False):
         logger.warning(f'数据库读写失败 - {e}')
 
 
-async def set_plain(conn: Connection, id: int, plain: str):
+async def set_plain(conn: Connection, id_: int, plain: str):
     '''
     向数据库写入id和plain
 
@@ -52,13 +52,13 @@ async def set_plain(conn: Connection, id: int, plain: str):
     '''
     sql = 'INSERT INTO "main"."plains"("id", "plain") VALUES (?,?);'
     try:
-        await conn.execute(sql, (str(id), plain))
+        await conn.execute(sql, (str(id_), plain))
         await conn.commit()
     except (DatabaseError, OperationalError, NotSupportedError) as e:
         logger.warning(f'操作数据库失败 {e}')
 
 
-async def get_plain(conn: Connection, id: int) -> str:
+async def get_plain(conn: Connection, id_: int) -> str:
     '''
     使用id向数据库查询plain
 
@@ -69,7 +69,7 @@ async def get_plain(conn: Connection, id: int) -> str:
     sql = 'SELECT "plain" From "main"."plains" WHERE "id" = ?;'
     try:
         cur = await conn.cursor()
-        await cur.execute(sql, (str(id),))
+        await cur.execute(sql, (str(id_),))
         result = await cur.fetchone()
         if result:
             plain, = result
@@ -80,7 +80,7 @@ async def get_plain(conn: Connection, id: int) -> str:
         logger.warning(f'操作数据库失败 {e}')
 
 
-async def del_plain(conn: Connection, id: int) -> str:
+async def del_plain(conn: Connection, id_: int) -> str:
     '''
     删除指定id,仅供测试
     
@@ -90,7 +90,7 @@ async def del_plain(conn: Connection, id: int) -> str:
     '''
     sql = 'DELETE FROM "main"."plains" WHERE "id" = ?;'
     try:
-        await conn.execute(sql, (str(id),))
+        await conn.execute(sql, (str(id_),))
         await conn.commit()
     except (DatabaseError, OperationalError, NotSupportedError) as e:
         logger.warning(f'操作数据库失败 {e}')

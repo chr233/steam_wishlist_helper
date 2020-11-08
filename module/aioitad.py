@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 19:48:26
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 12:27:58
+# @LastEditTime : 2020-11-08 20:28:12
 # @Description  : 对接ITAD的API【异步】
 '''
 
@@ -263,7 +263,9 @@ async def get_base_info(plains: list, token: str) -> dict:
 
 
 async def _get_base_info(client: AsyncClient, params: dict, plains: list) -> dict:
-    '''获取Steam商店史低价格
+    '''
+    获取Steam商店史低价格
+    
     参数：
         client: httpx Client对象
         params: 参考get_base_info里的用法

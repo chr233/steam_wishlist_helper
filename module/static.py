@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-05-03 23:20:00
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 19:09:12
+# @LastEditTime : 2020-11-08 20:27:47
 # @Description  : 静态常量
 '''
 
@@ -24,7 +24,10 @@ SCRIPT_VERSION = '1.00'
 
 
 class URLs():
-    '''URL常量'''
+    '''
+    URL常量
+    '''
+
     Steam_Store = 'https://store.steampowered.com/'
     Steam_Wishlist = 'https://store.steampowered.com/wishlist/profiles/%s/#sort=%s'
     Steam_Wishlist_XHR = 'https://store.steampowered.com/wishlist/profiles/%s/wishlistdata/?p=%s'
@@ -42,7 +45,8 @@ class URLs():
     Github_Releases = 'https://github.com/chr233/steam_wishlist_helper/releases'
     Github_Releases_API = 'https://api.github.com/repos/chr233/steam_wishlist_helper/releases/latest'
 
-HEADERS={
+
+HEADERS = {
     "Accept": "application/json",
     "Accept-Encoding": "gzip",
     "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",

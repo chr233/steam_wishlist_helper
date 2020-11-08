@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 15:26:33
+# @LastEditTime : 2020-11-08 20:27:30
 # @Description  : 读取并验证配置
 '''
 
@@ -18,7 +18,8 @@ default_path = path.join(getcwd(), 'config.toml')
 
 
 def get_config(path: str = default_path) -> dict:
-    '''读取并验证配置
+    '''
+    读取并验证配置
 
     参数:
         [path]:配置文件路径,默认为config.toml
@@ -43,7 +44,8 @@ def get_config(path: str = default_path) -> dict:
 
 
 def verify_config(cfg: dict) -> dict:
-    '''验证配置
+    '''
+    验证配置
 
     参数:
         cfg:配置字典

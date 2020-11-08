@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 10:25:56
+# @LastEditTime : 2020-11-08 20:27:18
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -85,7 +85,9 @@ async def _get_page_count(client: AsyncClient, steamid: int) -> int:
 
 
 async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> dict:
-    '''获取steam愿望单单页详情
+    '''
+    获取steam愿望单单页详情
+    
     参数:
         client: httpx异步client对象
         steamid: 64位steamid

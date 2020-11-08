@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-05-03 23:20:00
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 11:22:40
+# @LastEditTime : 2020-11-08 19:09:12
 # @Description  : 静态常量
 '''
 
@@ -13,8 +13,11 @@ DB_NAME = 'data.db'
 # 输出文件夹名称
 OP_PATH = 'output'
 
+# 网络超时时间
+TIMEOUT = 10
+
 # 每个线程的等待时间
-TREAD_CD = 0.5
+TREAD_CD = 0.8
 
 # 脚本版本
 SCRIPT_VERSION = '1.00'
@@ -39,6 +42,12 @@ class URLs():
     Github_Releases = 'https://github.com/chr233/steam_wishlist_helper/releases'
     Github_Releases_API = 'https://api.github.com/repos/chr233/steam_wishlist_helper/releases/latest'
 
+HEADERS={
+    "Accept": "application/json",
+    "Accept-Encoding": "gzip",
+    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.183 Safari/537.36 Steam_Wishlist_Helper",
+}
 
 Review2Num = {
     'Error': -1,

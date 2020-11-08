@@ -35,7 +35,7 @@ console = true
 # markdown格式的输出文件(Typora等软件可以打开)
 markdown = true
 # xlsx格式的输出文件(Excel可以打开)
-xlsx = true # 暂不支持
+xlsx = true
 # 论坛使用的BBCODE
 bbcode = true
 

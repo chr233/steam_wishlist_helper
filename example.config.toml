@@ -1,0 +1,50 @@
+[itad]
+# itad API设置,用于获取价格信息
+# 价格区域
+country = "CN"
+region = "cn"
+
+# 货币符号,用于输出
+currency_symbol = '¥'
+
+# API Token, 申请地址 https://new.isthereanydeal.com/apps/mine/
+token = ""
+
+[keylol]
+# keylol模块设置,用于获取游戏标签,卡牌等信息
+# 是否启用keylol模块,禁用的话将使用itad的API
+enable = false
+
+[steam]
+# Steam网页端语言选项
+# schinese代表简中, english代表英文
+language = "schinese"
+# 是否使用小尺寸的游戏图片,改为false将会使用大一些的图片
+small_game_pic = true
+# 代理设置,只支持http协议,用于访问愿望单,设为''禁用
+# 如果使用全局模式应该不需要设置
+# 如果配置的话只需要写"IP:端口"例如下面
+# proxy = 'http://127.0.0.1:8080'
+proxy = ''
+
+[output]
+#输出配置
+
+# 直接在控制台显示
+console = true
+# markdown格式的输出文件(Typora等软件可以打开)
+markdown = true
+# xlsx格式的输出文件(Excel可以打开)
+xlsx = true # 暂不支持
+# 论坛使用的BBCODE
+bbcode = true
+
+[auto]
+# 可选配置
+# 如果配置了下面的值,脚本将会自动代入配置的值
+# 如果没有配置,脚本将会要求你输入对应项目
+
+# Steam64位ID,只能为64位ID
+steamid = 0
+# 如果有多个账号,也可以这这么配置
+# steamid = [11111,22222,33333]

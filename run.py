@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-01 00:00:47
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 16:37:25
+# @LastEditTime : 2020-11-08 18:32:46
 # @Description  : 启动入口
 '''
 
@@ -32,10 +32,15 @@ async def main():
             logger.info(f'已经是最新版本 [{vc}<-{vl}]')
         else:
             logger.info((f'[*] 脚本有更新 [{vc}->{vl}]'
-                        f'{i}'
-                        f'{u}'))
+                         f'{i}'
+                         f'{u}'))
     else:
         logger.info('读取配置文件失败')
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
+
+try:
+    input('运行结束,按回车键退出……')
+except KeyboardInterrupt:
+    pass

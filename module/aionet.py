@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-11 12:25:45
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 14:41:47
+# @LastEditTime : 2020-11-08 18:36:20
 # @Description  : 网络请求模块
 '''
 import re
@@ -39,8 +39,13 @@ async def adv_http_get(client: AsyncClient, url: str, params: dict = None,
             await asyncio.sleep(TREAD_CD)
             return (resp)
         except Exception:
-            logger.debug('网络错误,暂停10秒')
-            await asyncio.sleep(10)
+            if _ == 0:
+                logger.debug('网络错误,暂停5秒')
+                await asyncio.sleep(5)
+            else:
+                logger.warning('网络错误,暂停30秒')
+                await asyncio.sleep(30)
+
     logger.error('网络错误,请求失败')
     return (None)
 
@@ -69,7 +74,11 @@ async def adv_http_get_keylol(client: AsyncClient, url: str, params: dict = None
             await asyncio.sleep(TREAD_CD)
             return (jd)
         except Exception as e:
-            logger.debug(f'网络错误,暂停30秒 {e}')
-            await asyncio.sleep(30)
+            if _ == 0:
+                logger.debug('网络错误,暂停15秒')
+                await asyncio.sleep(15)
+            else:
+                logger.warning('网络错误,暂停30秒')
+                await asyncio.sleep(30)
     logger.error('网络错误,请求失败')
     return {}

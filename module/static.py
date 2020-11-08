@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-05-03 23:20:00
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 20:27:47
+# @LastEditTime : 2020-11-08 23:19:28
 # @Description  : 静态常量
 '''
 
@@ -20,7 +20,7 @@ TIMEOUT = 10
 TREAD_CD = 0.8
 
 # 脚本版本
-SCRIPT_VERSION = '1.00'
+SCRIPT_VERSION = '1.01'
 
 
 class URLs():

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 16:43:20
+# @LastEditTime : 2020-11-09 01:14:03
 # @Description  : 抓取模块
 '''
 
@@ -11,7 +11,7 @@ from .log import get_logger
 from .aiosteam import get_wishlish
 from .aioitad import get_plains, get_lowest_price, get_current_price, get_base_info
 from .aiokeylol import get_games_tags
-from .handlers import bbcode, markdown, excel, console
+from .handlers import bbcode, markdown, excel#, console
 
 
 class crawer(object):
@@ -173,6 +173,7 @@ class crawer(object):
         if bbc:
             bbcode.handler(wishdict, symbol)
         if cmd:
-            console.handler(wishdict, symbol)
+            self.logger.warning('因为打包程序有问题,暂时禁用控制台输出的功能')
+            # console.handler(wishdict, symbol)
 
         self.logger.info('输出完成')

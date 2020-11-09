@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-08 10:11:20
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 11:23:03
+# @LastEditTime : 2020-11-09 19:50:21
 # @Description  : 版本管理
 '''
 
@@ -18,13 +18,15 @@ from .static import SCRIPT_VERSION, URLs
 logger = get_logger('Version')
 
 
-async def check_update() -> Tuple[str, str, str, str]:
-    async with AsyncClient() as client:
-
+async def check_update(setting: dict) -> Tuple[str, str, str, str]:
+    logger.info('正在后台检查更新')
+    net = setting.get('net', {})
+    proxy = net.get('proxy', None)
+    async with AsyncClient(proxies=proxy) as client:
         url = URLs.Github_Releases_API
         resp = await adv_http_get(client=client, url=url)
+        current_version = float(SCRIPT_VERSION)
         if resp:
-            current_version = float(SCRIPT_VERSION,)
             try:
                 jd = resp.json()
                 latest_version = float(str(jd['tag_name']))
@@ -42,3 +44,6 @@ async def check_update() -> Tuple[str, str, str, str]:
             except Exception:
                 logger.debug('检查最新版本出错')
                 return ((current_version, current_version, '检查更新出错', URLs.Github_Releases))
+        else:
+            logger.debug('检查最新版本出错')
+            return ((current_version, current_version, '检查更新出错', URLs.Github_Releases))

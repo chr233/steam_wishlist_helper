@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-11 12:25:45
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 20:11:13
+# @LastEditTime : 2020-11-09 19:49:21
 # @Description  : 网络请求模块
 '''
 import re
@@ -79,8 +79,8 @@ async def adv_http_get_keylol(client: AsyncClient, url: str, params: dict = None
             return (jd)
         except Exception:
             if _ == 0:
-                logger.debug('网络错误,暂停15秒')
-                await asyncio.sleep(15)
+                logger.debug('网络错误,暂停8秒')
+                await asyncio.sleep(8)
             else:
                 logger.warning('网络错误,暂停30秒')
                 await asyncio.sleep(30)

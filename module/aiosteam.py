@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 20:27:18
+# @LastEditTime : 2020-11-09 17:57:43
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -21,7 +21,7 @@ logger = get_logger('Steam')
 PIC_URL = URLs.Steam_Game_Pic_SM
 
 
-async def get_wishlish(steamid: int, settings: dict) -> dict:
+async def get_wishlish(steamid: int, settings: dict,proxy:dict=None) -> dict:
     '''
     异步读取Steam愿望单
 
@@ -32,25 +32,26 @@ async def get_wishlish(steamid: int, settings: dict) -> dict:
         dict: {appid:{游戏详情}}
     '''
     global PIC_URL
-    proxy = settings.get('proxy', None)
-    lang = settings.get('lang', 'schinese')
-    sm_pic = settings.get('small_game_pic', True)
+
+    steam = settings.get('steam', {})
+
+    lang = steam.get('lang', 'schinese')
+    sm_pic = steam.get('small_game_pic', True)
     PIC_URL = URLs.Steam_Game_Pic_SM if sm_pic else URLs.Steam_Game_Pic_MD
-    p = {"http://": proxy, "https://": proxy} if proxy else None
-    async with asyncio.Semaphore(3):  # 最大并发数
-        async with AsyncClient(proxies=p) as client:
-            client.cookies = {
-                'Cookie': f'wants_mature_content=1;Steam_Language={lang}'
-            }
-            try:
-                count = await _get_page_count(client=client, steamid=steamid)
-            except ValueError as e:
-                logger.warning(f'{e}')
-                return ({})
-            tasks = {
-                asyncio.create_task(_get_single_page(client=client, steamid=steamid, page=p)) for p in range(0, count)
-            }
-            await asyncio.wait(tasks)
+
+    async with AsyncClient(proxies=proxy) as client:
+        client.cookies = {
+            'Cookie': f'wants_mature_content=1;Steam_Language={lang}'
+        }
+        try:
+            count = await _get_page_count(client=client, steamid=steamid)
+        except ValueError as e:
+            logger.warning(f'{e}')
+            return ({})
+        tasks = {
+            asyncio.create_task(_get_single_page(client=client, steamid=steamid, page=p)) for p in range(0, count)
+        }
+        await asyncio.wait(tasks)
     wishlist = {}
     for task in tasks:
         wishlist.update(task.result())
@@ -87,7 +88,7 @@ async def _get_page_count(client: AsyncClient, steamid: int) -> int:
 async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> dict:
     '''
     获取steam愿望单单页详情
-    
+
     参数:
         client: httpx异步client对象
         steamid: 64位steamid

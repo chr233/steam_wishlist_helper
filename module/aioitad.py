@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 19:48:26
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 20:28:12
+# @LastEditTime : 2020-11-09 17:59:04
 # @Description  : 对接ITAD的API【异步】
 '''
 
@@ -22,7 +22,8 @@ from .static import URLs, DB_NAME
 logger = get_logger('ITAD')
 
 
-async def get_plains(ids: list, token: str, use_cache: bool = True) -> dict:
+async def get_plains(ids: list, token: str, use_cache: bool = True,
+                     proxy: dict = None) -> dict:
     '''
     把appid或subid转换成IsThereAnyDeal使用的plainid
 
@@ -41,36 +42,35 @@ async def get_plains(ids: list, token: str, use_cache: bool = True) -> dict:
 
     params = {'key': token, 'shop': 'steam', 'ids': ''}
     id2pdict = {}
-    async with asyncio.Semaphore(3):  # 最大并发数
-        if use_cache:  # 如果启用缓存则优先从本地读取plain
-            async with aiosqlite.connect(DB_NAME) as conn:
-                ncache = []
-                for id_ in ids:
-                    plain = await get_plain(conn, id_)
-                    if not plain:
-                        ncache.append(id_)
-                    else:
-                        id2pdict[id_] = plain
-        else:
-            ncache = ids
-        async with AsyncClient() as client:
-            max = len(ncache)
-            if max:
-                tasks = set()
-                for i in range(0, max, 30):
-                    part = ncache[i:i+30]
-                    tasks.add(asyncio.create_task(
-                        _get_plain(client, params, part)))
-                await asyncio.wait(tasks)
+    if use_cache:  # 如果启用缓存则优先从本地读取plain
+        async with aiosqlite.connect(DB_NAME) as conn:
+            ncache = []
+            for id_ in ids:
+                plain = await get_plain(conn, id_)
+                if not plain:
+                    ncache.append(id_)
+                else:
+                    id2pdict[id_] = plain
+    else:
+        ncache = ids
+    async with AsyncClient(proxies=proxy) as client:
+        max = len(ncache)
+        if max:
+            tasks = set()
+            for i in range(0, max, 30):
+                part = ncache[i:i+30]
+                tasks.add(asyncio.create_task(
+                    _get_plain(client, params, part)))
+            await asyncio.wait(tasks)
 
-                for task in tasks:
-                    dic = task.result()
-                    if use_cache:  # 如果启用缓存则将结果写入数据库
-                        async with aiosqlite.connect(DB_NAME) as conn:
-                            for key in dic.keys():
-                                if dic[key]:
-                                    await set_plain(conn, key, dic[key])
-                    id2pdict.update(dic)
+            for task in tasks:
+                dic = task.result()
+                if use_cache:  # 如果启用缓存则将结果写入数据库
+                    async with aiosqlite.connect(DB_NAME) as conn:
+                        for key in dic.keys():
+                            if dic[key]:
+                                await set_plain(conn, key, dic[key])
+                id2pdict.update(dic)
     return (id2pdict)
 
 
@@ -103,7 +103,8 @@ async def _get_plain(client: AsyncClient, params: dict, ids: list) -> str:
     return (result)
 
 
-async def get_current_price(plains: list, token: str, region: str, country: str) -> dict:
+async def get_current_price(plains: list, token: str, region: str, country: str,
+                            proxy: dict = None) -> dict:
     '''
     使用plainid获取当前价格
 
@@ -119,15 +120,14 @@ async def get_current_price(plains: list, token: str, region: str, country: str)
               'country': country, 'shops': 'steam'}
     pricedict = {}
     if plains:
-        async with asyncio.Semaphore(3):  # 最大并发数
-            async with AsyncClient() as client:
-                max = len(plains)
-                tasks = set()
-                for i in range(0, max, 5):
-                    part = plains[i:i+5]
-                    tasks.add(asyncio.create_task(
-                        _get_current_price(client, params, part)))
-                await asyncio.wait(tasks)
+        async with AsyncClient(proxies=proxy) as client:
+            max = len(plains)
+            tasks = set()
+            for i in range(0, max, 5):
+                part = plains[i:i+5]
+                tasks.add(asyncio.create_task(
+                    _get_current_price(client, params, part)))
+            await asyncio.wait(tasks)
         for task in tasks:
             dic = task.result()
             pricedict.update(dic)
@@ -169,7 +169,8 @@ async def _get_current_price(client: AsyncClient, params: dict, plains: list) ->
     return (pricedict)
 
 
-async def get_lowest_price(plains: list, token: str, region: str, country: str) -> dict:
+async def get_lowest_price(plains: list, token: str, region: str, country: str,
+                           proxy: dict = None) -> dict:
     '''
     获取Steam商店史低价格
 
@@ -185,15 +186,14 @@ async def get_lowest_price(plains: list, token: str, region: str, country: str) 
               'country': country, 'shops': 'steam'}
     pricedict = {}
     if plains:
-        async with asyncio.Semaphore(3):  # 最大并发数
-            async with AsyncClient() as client:
-                max = len(plains)
-                tasks = set()
-                for i in range(0, max, 5):
-                    part = plains[i:i+5]
-                    tasks.add(asyncio.create_task(
-                        _get_lowest_price(client, params, part)))
-                await asyncio.wait(tasks)
+        async with AsyncClient(proxies=proxy) as client:
+            max = len(plains)
+            tasks = set()
+            for i in range(0, max, 5):
+                part = plains[i:i+5]
+                tasks.add(asyncio.create_task(
+                    _get_lowest_price(client, params, part)))
+            await asyncio.wait(tasks)
         for task in tasks:
             dic = task.result()
             pricedict.update(dic)
@@ -234,7 +234,7 @@ async def _get_lowest_price(client: AsyncClient, params: dict, plains: list) -> 
     return (pricedict)
 
 
-async def get_base_info(plains: list, token: str) -> dict:
+async def get_base_info(plains: list, token: str, proxy: dict = None) -> dict:
     '''
     获取Steam商店游戏信息【只能获取2个属性,不建议使用】
 
@@ -247,15 +247,14 @@ async def get_base_info(plains: list, token: str) -> dict:
     params = {'key': token,  'plains': ''}
     infodict = {}
     if plains:
-        async with asyncio.Semaphore(3):  # 最大并发数
-            async with AsyncClient() as client:
-                max = len(plains)
-                tasks = set()
-                for i in range(0, max, 5):
-                    part = plains[i:i+5]
-                    tasks.add(asyncio.create_task(
-                        _get_base_info(client, params, part)))
-                await asyncio.wait(tasks)
+        async with AsyncClient(proxies=proxy) as client:
+            max = len(plains)
+            tasks = set()
+            for i in range(0, max, 5):
+                part = plains[i:i+5]
+                tasks.add(asyncio.create_task(
+                    _get_base_info(client, params, part)))
+            await asyncio.wait(tasks)
         for task in tasks:
             dic = task.result()
             infodict.update(dic)
@@ -265,7 +264,7 @@ async def get_base_info(plains: list, token: str) -> dict:
 async def _get_base_info(client: AsyncClient, params: dict, plains: list) -> dict:
     '''
     获取Steam商店史低价格
-    
+
     参数：
         client: httpx Client对象
         params: 参考get_base_info里的用法

@@ -3,13 +3,13 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 20:27:30
+# @LastEditTime : 2020-11-09 18:06:55
 # @Description  : 读取并验证配置
 '''
 
-import toml
-
 from os import getcwd, path
+
+import toml
 
 from .log import get_logger
 
@@ -52,53 +52,37 @@ def verify_config(cfg: dict) -> dict:
     返回:
         dict:验证过的配置字典,剔除错误的和不必要的项目
     '''
-    vcfg = {'itad': {}, 'keylol': {}, 'steam': {},
-            'output': {}, 'auto': {}}
+    auto = __verify_auto(cfg.get('auto', {}))
 
-    itad = cfg.get('itad', {})
-    token = itad.get('token', '')
-    region = itad.get('region', 'cn')
-    country = itad.get('country', 'CN')
-    symbol = itad.get('currency_symbol', '¥')
+    other = __verify_other(cfg.get('other', {}))
 
-    if not token and cfg:
+    itad = __verify_itad(cfg.get('itad', {}))
+    if not itad['token'] and cfg:
         raise ValueError('未设置API token,可以自行申请或者使用文档中的公共token')
 
-    vcfg['itad'] = {
-        'token': token,
-        'region': region,
-        'country': country,
-        'currency_symbol': symbol
-    }
+    keylol = __verify_keylol(cfg.get('keylol', {}))
 
-    keylol = cfg.get('keylol', {})
-    enable = bool(keylol.get('enable', True))
+    steam = __verify_steam(cfg.get('steam', {}))
 
-    vcfg['keylol'] = {
-        'enable': enable
-    }
+    net = __verify_net(cfg.get('net', {}))
 
-    steam = cfg.get('steam', {})
-    language = steam.get('language', 'schinese')
-    small_game_pic = bool(steam.get('small_game_pic', True))
-    proxy = steam.get('proxy', None)
+    output = __verify_output(cfg.get('output', {}))
 
-    vcfg['steam'] = {'language': language,
-                     'small_game_pic': small_game_pic,
-                     'proxy': proxy}
+    sort = __verify_sort(cfg.get('sort', {}))
 
-    output = cfg.get('output', {})
-    console = bool(output.get('console', True))
-    markdown = bool(output.get('markdown', False))
-    xlsx = bool(output.get('xlsx', True))
-    bbcode = bool(output.get('bbcode', False))
+    filter = __verify_filter(cfg.get('filter', {}))
 
-    vcfg['output'] = {'console': console,
-                      'markdown': markdown,
-                      'xlsx': xlsx,
-                      'bbcode': bbcode}
+    vcfg = {'auto': auto, 'other': other, 'itad': itad,
+            'keylol': keylol, 'steam': steam, 'net': net,
+            'output': output, 'sort': sort, 'filter': filter}
 
-    auto = cfg.get('auto', {})
+    return (vcfg)
+
+
+def __verify_auto(auto: dict) -> dict:
+    '''
+    验证auto节
+    '''
     steamid = auto.get('steamid', None)
     if (steamid and not isinstance(steamid, list)):
         steamid = [steamid]
@@ -110,6 +94,86 @@ def verify_config(cfg: dict) -> dict:
                 vsteamid.append(int(steamid[i]))
             except ValueError:
                 logger.warning(f'错误的steamid: [{steamid[i]}]')
+    auto = {'steamid': steamid}
+    return (auto)
 
-    vcfg['auto'] = {'steamid': vsteamid}
-    return (vcfg)
+
+def __verify_other(other: dict) -> dict:
+    '''
+    验证other节
+    '''
+    wait_screen = bool(other.get('wait_screen', True))
+    other = {'wait_screen': wait_screen}
+    return (other)
+
+
+def __verify_itad(itad: dict) -> dict:
+    '''
+    验证itad节
+    '''
+    token = itad.get('token', '')
+    region = itad.get('region', 'cn')
+    country = itad.get('country', 'CN')
+    symbol = itad.get('currency_symbol', '¥')
+    itad = {'token': token,
+            'region': region,
+            'country': country,
+            'currency_symbol': symbol}
+    return (itad)
+
+
+def __verify_keylol(keylol: dict) -> dict:
+    '''
+    验证keylol节
+    '''
+    enable = bool(keylol.get('enable', True))
+    keylol = {'enable': enable}
+    return (keylol)
+
+
+def __verify_steam(steam: dict) -> dict:
+    '''
+    验证steam节
+    '''
+    language = steam.get('language', 'schinese')
+    small_game_pic = bool(steam.get('small_game_pic', True))
+    steam = {'language': language,
+             'small_game_pic': small_game_pic}
+    return (steam)
+
+
+def __verify_net(net: dict) -> dict:
+    '''
+    验证net节
+    '''
+    proxy = net.get('proxy', None)
+    p = {"http://": proxy, "https://": proxy} if proxy else None
+    net = {'proxy': p}
+    return (net)
+
+
+def __verify_output(output: dict) -> dict:
+    '''
+    验证output节
+    '''
+    console = bool(output.get('console', True))
+    markdown = bool(output.get('markdown', False))
+    xlsx = bool(output.get('xlsx', True))
+    bbcode = bool(output.get('bbcode', False))
+    output = {'console': console, 'markdown': markdown,
+              'xlsx': xlsx, 'bbcode': bbcode}
+    return (output)
+
+
+def __verify_sort(filter: dict) -> dict:
+    ''' 
+    验证sort节
+    '''
+    return (filter)
+
+
+def __verify_filter(filter: dict) -> dict:
+    ''' 
+    验证filter节
+    '''
+    return (filter)

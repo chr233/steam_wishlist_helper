@@ -3,15 +3,16 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 01:14:03
+# @LastEditTime : 2020-11-09 18:03:08
 # @Description  : 抓取模块
 '''
+from asyncio import Semaphore
 
 from .log import get_logger
 from .aiosteam import get_wishlish
 from .aioitad import get_plains, get_lowest_price, get_current_price, get_base_info
 from .aiokeylol import get_games_tags
-from .handlers import bbcode, markdown, excel#, console
+from .handlers import bbcode, markdown, excel  # , console
 
 
 class crawer(object):
@@ -44,22 +45,27 @@ class crawer(object):
             raise ValueError('steam ID必须为非空列表')
 
     async def start(self):
-        await self.get_wishlist()
-        await self.add_price()
-        await self.add_addition()
-        self.output()
+        async with Semaphore(3):  # 最大并发数
+            await self.get_wishlist()
+            await self.add_price()
+            await self.add_addition()
+            self.output()
 
     async def get_wishlist(self):
         '''
         从steam读取愿望单
         '''
         wishdict = self.wishdict
-        setting = self.setting['steam']
+        setting = self.setting
         steamids = self.steamids
+
+        net = setting.get('net', {})
+        proxy = net.get('proxy', None)
+
         self.logger.info('开始读取愿望单,如果一直报错请配置proxy')
         for i, sid in enumerate(steamids, 1):
             self.logger.info(f'开始读取 {steamids} 的愿望单 {i}')
-            dic = await get_wishlish(sid, setting)
+            dic = await get_wishlish(sid, setting, proxy)
             self.logger.info(f'读取完毕,愿望单中共有{len(dic)}个游戏')
             wishdict.update(dic)
         self.logger.info(f'愿望单读取完毕,合并后共有{len(wishdict)}个游戏')
@@ -69,19 +75,25 @@ class crawer(object):
         获取游戏价格信息
         '''
         wishlist = self.wishdict
-        setting = self.setting.get('itad', {})
-        token = setting.get('token')
-        region = setting.get('region', 'cn')
-        country = setting.get('country', 'CN')
+        setting = self.setting
+
+        itad = setting.get('itad', {})
+        net = setting.get('net', {})
+
+        proxy = net.get('proxy', None)
+        token = itad.get('token')
+        region = itad.get('region', 'cn')
+        country = itad.get('country', 'CN')
+
         ids = list(wishlist.keys())
         self.logger.info('开始获取游戏ID,第一次耗时会比较久')
-        plaindict = await get_plains(ids, token, True)
+        plaindict = await get_plains(ids, token, True, proxy)
         self.logger.info(f'游戏ID读取完毕,共{len(plaindict)}条')
 
         plains = list(plaindict.values())
         self.logger.info('开始获取游戏价格信息,可能会比较久')
-        current_dict = await get_current_price(plains, token, region, country)
-        lowest_dict = await get_lowest_price(plains, token, region, country)
+        current_dict = await get_current_price(plains, token, region, country, proxy)
+        lowest_dict = await get_lowest_price(plains, token, region, country, proxy)
         print('')
         self.logger.info('整理游戏价格数据')
         for key in wishlist.keys():
@@ -116,6 +128,9 @@ class crawer(object):
         '''
         wishdict = self.wishdict
         setting = self.setting
+        net = setting.get('net', {})
+        proxy = net.get('proxy', None)
+
         ids = list(wishdict.keys())
         errors = 0
         if setting['keylol']['enable']:
@@ -134,10 +149,10 @@ class crawer(object):
         else:
             self.logger.info('使用ITAD模块获取附加信息,可能会比较久')
             token = setting['itad']['token']
-            plaindict = await get_plains(ids, token)
+            plaindict = await get_plains(ids, token, True, proxy)
             self.logger.info(f'ID读取完毕,共{len(plaindict)}条')
             plains = list(plaindict.values())
-            additiondict = await get_base_info(plains, token)
+            additiondict = await get_base_info(plains, token, proxy)
             for key in wishdict.keys():
                 try:
                     plain = plaindict[key]
@@ -167,13 +182,25 @@ class crawer(object):
 
         self.logger.info('开始输出')
         if md:
-            markdown.handler(wishdict, symbol)
+            try:
+                markdown.handler(wishdict, symbol)
+            except Exception as e:
+                self.logger.error(f'遇到错误: {e}')
         if xlsx:
-            excel.handler(wishdict, symbol)
+            try:
+                excel.handler(wishdict, symbol)
+            except Exception as e:
+                self.logger.error(f'遇到错误: {e}')
         if bbc:
-            bbcode.handler(wishdict, symbol)
+            try:
+                bbcode.handler(wishdict, symbol)
+            except Exception as e:
+                self.logger.error(f'遇到错误: {e}')
         if cmd:
-            self.logger.warning('因为打包程序有问题,暂时禁用控制台输出的功能')
-            # console.handler(wishdict, symbol)
+            try:
+                self.logger.warning('因为打包程序有问题,暂时禁用控制台输出的功能')
+                # console.handler(wishdict, symbol)
+            except Exception as e:
+                self.logger.error(f'遇到错误: {e}')
 
         self.logger.info('输出完成')

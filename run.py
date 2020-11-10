@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-01 00:00:47
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 19:49:36
+# @LastEditTime : 2020-11-10 10:52:58
 # @Description  : 启动入口
 '''
 
@@ -21,19 +21,15 @@ async def main():
     cfg = get_config()
     if cfg:
         steamid = cfg['auto']['steamid'] or [input('请输入64位steam ID: ')]
-        vc, vl, i, u = await check_update(cfg)
         c = crawer(cfg, steamid)
-        await c.start()
 
-        # 检查脚本更新
-        if (vc == vl):
-            logger.info(f'已经是最新版本 [{vc}]')
-        elif (vc > vl):
-            logger.info(f'已经是最新版本 [{vc}<-{vl}]')
-        else:
-            logger.info((f'[*] 脚本有更新 [{vc}->{vl}]'
-                         f'{i}'
-                         f'{u}'))
+        # 异步检查更新
+        tasks = [
+            asyncio.create_task(check_update(cfg)),
+            asyncio.create_task(c.start())
+        ]
+        await asyncio.wait(tasks)
+
         try:
             if (cfg['other']['wait_screen']):
                 input('运行结束,按回车键退出……')

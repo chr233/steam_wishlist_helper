@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-08 10:11:20
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 19:50:21
+# @LastEditTime : 2020-11-10 10:56:25
 # @Description  : 版本管理
 '''
 
@@ -18,8 +18,30 @@ from .static import SCRIPT_VERSION, URLs
 logger = get_logger('Version')
 
 
-async def check_update(setting: dict) -> Tuple[str, str, str, str]:
-    logger.info('正在后台检查更新')
+async def check_update(setting: dict):
+    '''
+    检查脚本更新
+    '''
+    vc, vl, i, u = await __check_update(setting)
+    # 检查脚本更新
+    if (vc == vl):
+        logger.info(f'已经是最新版本,当前版本 [{vc}]')
+    elif (vc > vl):
+        logger.info(f'已经是最新版本,当前版本 [{vc}] , 最新发布版本 [{vl}]')
+    else:
+        print('\n'*2)
+        logger.info((f'[*] 脚本有更新,最新发布版本 [{vl}]\n'
+                     '更新内容:\n'
+                     f'{i}\n'
+                     f'{u}'))
+        print('\n'*2)
+
+
+async def __check_update(setting: dict) -> Tuple[str, str, str, str]:
+    '''
+    检查脚本版本
+    '''
+    logger.debug('正在后台检查更新')
     net = setting.get('net', {})
     proxy = net.get('proxy', None)
     async with AsyncClient(proxies=proxy) as client:

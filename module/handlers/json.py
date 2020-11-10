@@ -3,10 +3,10 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 20:09:29
+# @LastEditTime : 2020-11-10 20:17:38
 # @Description  : 输出Json文件
 '''
-from json import dump, dumps
+from json import dumps
 
 from ..log import get_logger
 from ..utils import is_lowest_str, get_output_path

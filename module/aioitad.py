@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 19:48:26
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 17:59:04
+# @LastEditTime : 2020-11-10 20:18:16
 # @Description  : 对接ITAD的API【异步】
 '''
 
@@ -54,10 +54,10 @@ async def get_plains(ids: list, token: str, use_cache: bool = True,
     else:
         ncache = ids
     async with AsyncClient(proxies=proxy) as client:
-        max = len(ncache)
-        if max:
+        max_ = len(ncache)
+        if max_:
             tasks = set()
-            for i in range(0, max, 30):
+            for i in range(0, max_, 30):
                 part = ncache[i:i+30]
                 tasks.add(asyncio.create_task(
                     _get_plain(client, params, part)))
@@ -121,9 +121,9 @@ async def get_current_price(plains: list, token: str, region: str, country: str,
     pricedict = {}
     if plains:
         async with AsyncClient(proxies=proxy) as client:
-            max = len(plains)
+            max_ = len(plains)
             tasks = set()
-            for i in range(0, max, 5):
+            for i in range(0, max_, 5):
                 part = plains[i:i+5]
                 tasks.add(asyncio.create_task(
                     _get_current_price(client, params, part)))
@@ -187,9 +187,9 @@ async def get_lowest_price(plains: list, token: str, region: str, country: str,
     pricedict = {}
     if plains:
         async with AsyncClient(proxies=proxy) as client:
-            max = len(plains)
+            max_ = len(plains)
             tasks = set()
-            for i in range(0, max, 5):
+            for i in range(0, max_, 5):
                 part = plains[i:i+5]
                 tasks.add(asyncio.create_task(
                     _get_lowest_price(client, params, part)))
@@ -248,9 +248,9 @@ async def get_base_info(plains: list, token: str, proxy: dict = None) -> dict:
     infodict = {}
     if plains:
         async with AsyncClient(proxies=proxy) as client:
-            max = len(plains)
+            max_ = len(plains)
             tasks = set()
-            for i in range(0, max, 5):
+            for i in range(0, max_, 5):
                 part = plains[i:i+5]
                 tasks.add(asyncio.create_task(
                     _get_base_info(client, params, part)))

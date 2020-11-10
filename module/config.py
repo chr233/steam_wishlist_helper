@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 12:14:49
+# @LastEditTime : 2020-11-10 19:12:02
 # @Description  : 读取并验证配置
 '''
 
@@ -170,15 +170,11 @@ def __verify_sort(sort: dict) -> dict:
     ''' 
     验证sort节
     '''
-    index_A = aint(sort.get('index_A', 0), 0)
-    index_B = aint(sort.get('index_B', 0), 0)
-    if(abs(index_A) > 7):
-        index_A = 0
-        logger.warning(f'[filter]节 index_A 设置有误 (index_A = {index_A})')
-    if(abs(index_B) > 7):
-        index_B = 0
-        logger.warning(f'[filter]节 index_B 设置有误 (index_B = {index_B})')
-    sort = {'index_A': index_A, 'index_B': index_B}
+    index = aint(sort.get('index', 0), 0)
+    if(abs(index) > 7):
+        index = 0
+        logger.warning(f'[filter]节 index 设置有误 (index = {index})')
+    sort = {'index': index}
     return (sort)
 
 

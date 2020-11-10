@@ -7,9 +7,11 @@
 
 需要Python3.8及以上
 
+> [蓝奏云镜像][2] 密码:cg84
+
 ## 使用方法
 
-* 从[发布页][0]下载最新版本并解压
+* 从[发布页][0]或者[蓝奏云][2] (密码:cg84) 下载最新版本并解压
 * pip install -r requirements.txt
 * 将 example.config.toml 重命名为 config.toml
 * 修改 config.toml , 填入自己的API Token([申请地址][1])
@@ -28,5 +30,6 @@
 [b5]: https://img.shields.io/github/v/release/chr233/steam_wishlist_helper
 [b6]: https://github.com/chr233/steam_wishlist_helper/blob/master/license
 [b7]: https://img.shields.io/github/license/chr233/steam_wishlist_helper
-[0]:https://github.com/chr233/steam_wishlist_helper/releases
-[1]:https://new.isthereanydeal.com/apps/mine/
+[0]: https://github.com/chr233/steam_wishlist_helper/releases
+[1]: https://new.isthereanydeal.com/apps/mine/
+[2]: https://wws.lanzous.com/b01nqwxta

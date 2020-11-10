@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 14:52:44
+# @LastEditTime : 2020-11-10 15:03:22
 # @Description  : 输出Markdown文件
 '''
 
@@ -13,21 +13,21 @@ from ..utils import is_lowest_str, get_output_path
 logger = get_logger('Markdown')
 
 
-def handler(wishdict: dict, symbol: str):
+def handler(wishdict: dict, index: list, symbol: str):
     '''
     这个函数将会被crawer调用
 
     参数:
         wishdict: 愿望单字典
     '''
-    data = formater(wishdict, symbol)
+    data = formater(wishdict, index, symbol)
     p = get_output_path('swh-markdown.md')
     with open(p, 'w+', encoding='utf-8') as f:
         f.write(data)
     logger.info(f'写入文件到 {p}')
 
 
-def formater(wishdict: dict, symbol: str) -> str:
+def formater(wishdict: dict, index: list, symbol: str) -> str:
     '''
     这个函数用于从愿望单字典中提取数据
 

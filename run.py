@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-01 00:00:47
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 10:52:58
+# @LastEditTime : 2020-11-10 19:03:04
 # @Description  : 启动入口
 '''
 
@@ -23,9 +23,8 @@ async def main():
         steamid = cfg['auto']['steamid'] or [input('请输入64位steam ID: ')]
         c = crawer(cfg, steamid)
 
-        # 异步检查更新
         tasks = [
-            asyncio.create_task(check_update(cfg)),
+            asyncio.create_task(check_update(cfg)),  # 异步检查更新
             asyncio.create_task(c.start())
         ]
         await asyncio.wait(tasks)

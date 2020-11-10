@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 16:14:24
+# @LastEditTime : 2020-11-10 12:12:29
 # @Description  : 一些公共函数
 '''
 
@@ -66,4 +66,52 @@ def get_output_path(name: str) -> str:
     if not path.exists(OP_PATH):
         makedirs(OP_PATH)
     p = path.join(getcwd(), OP_PATH, name)
-    return (str(p))
+    return str(p)
+
+def aint(value:all,default:int=-1)->int:
+    '''
+    带默认值的int()
+
+    参数:
+        value: 待转换值
+        default: 默认值
+    返回:
+        int
+    '''
+    try:    
+        r=int(value)
+    except ValueError:
+        r=default
+    return r
+
+def fbool(value:all,default:int=-1)->int:
+    '''
+    带默认值的int()
+
+    参数:
+        value: 待转换值
+        default: 默认值
+    返回:
+        int
+    '''
+    try:    
+        r=int(value)
+    except ValueError:
+        r=default
+    return r
+
+def fint(value:all,default:int=-1)->int:
+    '''
+    带默认值的int()
+
+    参数:
+        value: 待转换值
+        default: 默认值
+    返回:
+        int
+    '''
+    try:    
+        r=int(value)
+    except ValueError:
+        r=default
+    return r

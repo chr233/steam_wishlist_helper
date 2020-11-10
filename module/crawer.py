@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 18:03:08
+# @LastEditTime : 2020-11-10 15:01:57
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -13,6 +13,8 @@ from .aiosteam import get_wishlish
 from .aioitad import get_plains, get_lowest_price, get_current_price, get_base_info
 from .aiokeylol import get_games_tags
 from .handlers import bbcode, markdown, excel  # , console
+from .sort import get_index
+from .filter import filter
 
 
 class crawer(object):
@@ -20,15 +22,15 @@ class crawer(object):
     wishdict = {}  # {appid: {游戏详情}}
     steamids = {}  # steam账号列表
     setting = {}   # 配置
+    index = []     # 索引
 
-    def __init__(self, config: dict, steamids: list, tag: str = None) -> None:
+    def __init__(self, setting: dict, steamids: list, tag: str = None) -> None:
         '''
         初始化抓取器
 
         参数:
             config: 调用module.config.get_config()获取
             steamids: steamid列表
-            tag: 日志输出标记
         '''
         try:
             steamids = set(steamids)
@@ -37,7 +39,7 @@ class crawer(object):
 
         if steamids:
             self.steamids = steamids
-            self.setting = config
+            self.setting = setting
 
             self.logger = get_logger(f'Crawer *{len(steamids)}')
             self.logger.debug(f'共有{len(steamids)}个账号')
@@ -49,6 +51,8 @@ class crawer(object):
             await self.get_wishlist()
             await self.add_price()
             await self.add_addition()
+            self.filter()
+            self.sort()
             self.output()
 
     async def get_wishlist(self):
@@ -167,11 +171,29 @@ class crawer(object):
         self.logger.debug(f'总计{errors}个错误')
         self.logger.info('附加信息读取完成')
 
+    def filter(self):
+        '''
+        按照配置过滤愿望单
+        '''
+        # wishdict = self.wishdict
+        # symbol = self.setting['itad']['currency_symbol']
+        # setting = self.setting['output']
+        pass
+
+    def sort(self):
+        '''
+        按照配置过滤愿望单
+        '''
+        wishdict = self.wishdict
+        setting = self.setting['sort']
+        self.index = get_index(wishdict, setting)
+
     def output(self):
         '''
         按照配置输出到文件
         '''
         wishdict = self.wishdict
+        index = self.index
         symbol = self.setting['itad']['currency_symbol']
         setting = self.setting['output']
 
@@ -180,26 +202,29 @@ class crawer(object):
         xlsx = setting.get('xlsx', False)
         bbc = setting.get('bbcode', False)
 
+        if not index:
+            index = wishdict.keys()
+
         self.logger.info('开始输出')
         if md:
             try:
-                markdown.handler(wishdict, symbol)
+                markdown.handler(wishdict, index, symbol)
             except Exception as e:
                 self.logger.error(f'遇到错误: {e}')
         if xlsx:
             try:
-                excel.handler(wishdict, symbol)
+                excel.handler(wishdict, index, symbol)
             except Exception as e:
                 self.logger.error(f'遇到错误: {e}')
         if bbc:
             try:
-                bbcode.handler(wishdict, symbol)
+                bbcode.handler(wishdict, index, symbol)
             except Exception as e:
                 self.logger.error(f'遇到错误: {e}')
         if cmd:
             try:
                 self.logger.warning('因为打包程序有问题,暂时禁用控制台输出的功能')
-                # console.handler(wishdict, symbol)
+                # console.handler(wishdict, index, symbol)
             except Exception as e:
                 self.logger.error(f'遇到错误: {e}')
 

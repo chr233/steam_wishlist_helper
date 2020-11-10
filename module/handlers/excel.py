@@ -15,7 +15,7 @@ from ..utils import is_lowest_str, get_output_path
 logger = get_logger('Excel')
 
 
-def handler(wishdict: dict, symbol: str):
+def handler(wishdict: dict, index: list, symbol: str):
     '''
     这个函数将会被crawer调用
 
@@ -25,7 +25,7 @@ def handler(wishdict: dict, symbol: str):
     p = get_output_path('swh-excel.xlsx')
     try:
         wb = Workbook(p)
-        formater(wishdict, symbol, wb)
+        formater(wishdict, index, symbol, wb)
         wb.close()
     except Exception as e:
         logger.error(f'遇到意外错误 {e}')
@@ -33,7 +33,7 @@ def handler(wishdict: dict, symbol: str):
     logger.info(f'写入文件到 {p}')
 
 
-def formater(wishdict: dict, symbol: str, wb: Workbook):
+def formater(wishdict: dict, index: list, symbol: str, wb: Workbook):
     '''
     这个函数用于从愿望单字典中提取数据
 

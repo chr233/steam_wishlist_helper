@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 12:12:29
+# @LastEditTime : 2020-11-11 16:19:26
 # @Description  : 一些公共函数
 '''
 
@@ -68,7 +68,8 @@ def get_output_path(name: str) -> str:
     p = path.join(getcwd(), OP_PATH, name)
     return str(p)
 
-def aint(value:all,default:int=-1)->int:
+
+def dint(value: all, default: int = -1) -> int:
     '''
     带默认值的int()
 
@@ -78,15 +79,32 @@ def aint(value:all,default:int=-1)->int:
     返回:
         int
     '''
-    try:    
-        r=int(value)
+    try:
+        r = int(value)
     except ValueError:
-        r=default
+        r = default
     return r
 
-def fbool(value:all,default:int=-1)->int:
+def fbool(value: all) -> bool:
     '''
-    带默认值的int()
+    根据value,返回True,False或者-1
+
+    参数:
+        value: 待转换值
+    返回:
+        int
+    '''
+    value = dint(value, value)
+
+    if value <= -1:
+        return -1
+    else:
+        return bool(value)
+
+
+def fint(value: all, default: int = -1) -> int:
+    '''
+    根据value,返回大于0的整数,或者-1
 
     参数:
         value: 待转换值
@@ -94,24 +112,9 @@ def fbool(value:all,default:int=-1)->int:
     返回:
         int
     '''
-    try:    
-        r=int(value)
-    except ValueError:
-        r=default
-    return r
+    value = dint(value, -1)
 
-def fint(value:all,default:int=-1)->int:
-    '''
-    带默认值的int()
-
-    参数:
-        value: 待转换值
-        default: 默认值
-    返回:
-        int
-    '''
-    try:    
-        r=int(value)
-    except ValueError:
-        r=default
-    return r
+    if value <= -1:
+        return -1
+    else:
+        return value

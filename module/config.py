@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 19:12:02
+# @LastEditTime : 2020-11-11 16:26:36
 # @Description  : 读取并验证配置
 '''
 
@@ -12,7 +12,8 @@ from os import getcwd, path
 import toml
 
 from .log import get_logger
-from .utils import aint
+from .utils import dint,fint,fbool
+from .static import SORT_TYPE
 
 logger = get_logger('Config')
 default_path = path.join(getcwd(), 'config.toml')
@@ -170,8 +171,8 @@ def __verify_sort(sort: dict) -> dict:
     ''' 
     验证sort节
     '''
-    index = aint(sort.get('index', 0), 0)
-    if(abs(index) > 7):
+    index = dint(sort.get('index', 0), 0)
+    if(abs(index) > SORT_TYPE):
         index = 0
         logger.warning(f'[filter]节 index 设置有误 (index = {index})')
     sort = {'index': index}
@@ -182,7 +183,6 @@ def __verify_filter(filter: dict) -> dict:
     ''' 
     验证filter节
     '''
-    index_A = aint(filter.get('index_A', 0), 0)
-    index_B = aint(filter.get('index_B', 0), 0)
-    filter = {'index_A': index_A, 'index_B': index_B}
+
+    filter = {}
     return (filter)

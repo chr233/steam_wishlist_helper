@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-11 16:19:26
+# @LastEditTime : 2020-11-11 20:10:54
 # @Description  : 一些公共函数
 '''
 
@@ -85,6 +85,7 @@ def dint(value: all, default: int = -1) -> int:
         r = default
     return r
 
+
 def fbool(value: all) -> bool:
     '''
     根据value,返回True,False或者-1
@@ -102,19 +103,39 @@ def fbool(value: all) -> bool:
         return bool(value)
 
 
-def fint(value: all, default: int = -1) -> int:
+def fint(value: all, max_: int = 0) -> int:
     '''
     根据value,返回大于0的整数,或者-1
 
     参数:
         value: 待转换值
-        default: 默认值
+        max_: 默认值
     返回:
         int
     '''
     value = dint(value, -1)
 
-    if value <= -1:
-        return -1
-    else:
+    if max_ > 0 and 0 <= value <= max_:
         return value
+    elif max_ == 0 and 0 <= value:
+        return value
+    else:
+        return -1
+
+
+def flist(value: all) -> int:
+    '''
+    根据value,返回字符串列表
+
+    参数:
+        value: 待转换值
+    返回:
+        int
+    '''
+    value = dint(value, value)
+
+    nlist = []
+    if value != -1:
+        if isinstance(value, list):
+            for i in value:
+                nlist.append(str(i))

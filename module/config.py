@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-11 16:26:36
+# @LastEditTime : 2020-11-11 20:13:14
 # @Description  : 读取并验证配置
 '''
 
@@ -12,7 +12,7 @@ from os import getcwd, path
 import toml
 
 from .log import get_logger
-from .utils import dint,fint,fbool
+from .utils import dint, fint, fbool
 from .static import SORT_TYPE
 
 logger = get_logger('Config')
@@ -183,6 +183,49 @@ def __verify_filter(filter: dict) -> dict:
     ''' 
     验证filter节
     '''
+    price_noset = fbool(filter.get('price_noset', -1))
+    price_free = fbool(filter.get('price_free', -1))
+    price_higher = fint(filter.get('price_higher', -1), 0)
+    price_lower = fint(filter.get('price_lower', -1), 0)
 
-    filter = {}
+    discount_higher = fint(filter.get('discount_higher', -1), 100)
+    discount_lower = fint(filter.get('discount_lower', -1), 100)
+    discount_reach_lowest = fbool(filter.get('discount_reach_lowest', -1))
+    discount_almost_lowest = fbool(filter.get('discount_almost_lowest', -1))
+
+    review_score_higher = fint(filter.get('review_score_higher', -1), 9)
+    review_score_lower = fint(filter.get('review_score_lower', -1), 9)
+    review_percent_higher = fint(filter.get('review_percent_higher', -1), 100)
+    review_percent_lower = fint(filter.get('review_percent_lower', -1), 100)
+    review_count_higher = fint(filter.get('review_count_higher', -1), 0)
+    review_count_lower = fint(filter.get('review_count_lower', -1), 0)
+
+    platform_windows = fbool(filter.get('platform_windows', -1))
+    platform_mac = fbool(filter.get('platform_mac', -1))
+    platform_linux = fbool(filter.get('platform_linux', -1))
+
+    # test=filter.get('test')
+
+    filter = {
+        'price_noset': price_noset,
+        'price_free': price_free,
+        'price_higher': price_higher,
+        'price_lower': price_lower,
+
+        'discount_higher': discount_higher,
+        'discount_lower': discount_lower,
+        'discount_reach_lowest': discount_reach_lowest,
+        'discount_almost_lowest': discount_almost_lowest,
+
+        'review_score_higher': review_score_higher,
+        'review_score_lower': review_score_lower,
+        'review_percent_higher': review_percent_higher,
+        'review_percent_lower': review_percent_lower,
+        'review_count_higher': review_count_higher,
+        'review_count_lower': review_count_lower,
+
+        'platform_windows':platform_windows,
+        'platform_mac':platform_mac,
+        'platform_linux':platform_linux,
+    }
     return (filter)

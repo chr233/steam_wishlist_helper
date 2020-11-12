@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:40:53
+# @LastEditTime : 2020-11-12 23:57:15
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -21,7 +21,7 @@ logger = get_logger('Steam')
 PIC_URL = URLs.Steam_Game_Pic_SM
 
 
-async def get_wishlish(steamid: int, settings: dict,proxy:dict=None) -> dict:
+async def get_wishlish(steamid: int, settings: dict, proxy: dict = None) -> dict:
     '''
     异步读取Steam愿望单
 
@@ -129,6 +129,7 @@ async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> 
                 'tags': data.get('tags', []),
                 'add_date': int(data.get('added', 0)),
                 # 'rank': int(data.get('rank', 0)),
+                'price': {},
                 'platform': (
                     data.get('win', 0) == 1,
                     data.get('mac', 0) == 1,

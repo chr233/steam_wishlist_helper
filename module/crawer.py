@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:24:47
+# @LastEditTime : 2020-11-12 18:54:49
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -15,6 +15,7 @@ from .aiokeylol import get_games_tags
 from .handlers import bbcode, markdown, excel  # , console
 from .sort import get_index
 from .filter import filter
+from .utils import is_lowest
 
 
 class Crawer(object):
@@ -110,20 +111,31 @@ class Crawer(object):
             try:
                 p_now, p_old, p_cut = current_dict[plain]
             except KeyError:
+                # 没有当前价格数据
                 p_now, p_old, p_cut = -1, -1, 0
             try:
                 p_low, p_low_cut, p_low_time = lowest_dict[plain]
             except KeyError:
+                # 没有史低价格数据
                 p_low, p_low_cut, p_low_time = -1, 0, 0
 
             obj = wishlist[key]
 
-            obj['price_current'] = p_now
-            obj['price_origion'] = p_old
-            obj['price_cut'] = p_cut
-            obj['price_lowest'] = p_low
-            obj['price_low_cut'] = p_low_cut
-            obj['price_low_time'] = p_low_time
+            obj['price'] = {
+                'current': p_now,
+                'origin': p_old,
+                'current_cut': p_cut,
+                'lowest': p_low,
+                'low_cut': p_low_cut,
+                'low_time': p_low_time,
+                'is_lowest': is_lowest(p_old, p_now, p_low, p_cut)
+            }
+            # obj['price_current'] = p_now
+            # obj['price_origion'] = p_old
+            # obj['price_cut'] = p_cut
+            # obj['price_lowest'] = p_low
+            # obj['price_low_cut'] = p_low_cut
+            # obj['price_low_time'] = p_low_time
         self.logger.info('价格数据整理完成')
 
     async def add_addition(self):

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 17:30:18
+# @LastEditTime : 2020-11-12 18:54:11
 # @Description  : 一些公共函数
 '''
 
@@ -24,7 +24,6 @@ def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
     返回:
         int: 1-史低,0-未达史低也不是近史低,-1-近史低
     '''
-
     if (cut > 0):
         if (current <= lowest):  # 史低
             return 1
@@ -34,7 +33,7 @@ def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
     return 0
 
 
-def is_lowest_str(origin: int, current: int, lowest: int, cut: int) -> int:
+def is_lowest_str(r:int) -> int:
     '''
     检查价格是否为史低
 
@@ -45,8 +44,6 @@ def is_lowest_str(origin: int, current: int, lowest: int, cut: int) -> int:
     返回:
         str: 史低/近史低/空文本
     '''
-
-    r = is_lowest(origin, current, lowest, cut)
     if (r > 0):
         return "史低"
     elif (r < 0):

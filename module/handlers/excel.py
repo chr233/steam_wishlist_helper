@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-08 14:32:58
+# @LastEditTime : 2020-11-12 18:57:49
 # @Description  : 输出Xlsx文件
 '''
 
@@ -72,12 +72,13 @@ def formater(wishdict: dict, index: list, symbol: str, wb: Workbook):
             name = detail.get('name', '')
             has_card = '有' if detail.get('has_card', False) else '无'
             # pic = detail.get('picture', '#')
-            if 'price_current' in detail:
-                p_now = detail.get('price_current')
-                p_old = detail.get('price_origion')
-                p_cut = detail.get('price_cut')
-                p_low = detail.get('price_lowest')
-                shidi = is_lowest_str(p_old, p_now, p_low, p_cut)
+            if 'price' in detail:
+                price = detail['price']
+                p_now = price.get('current')
+                p_old = price.get('origion')
+                p_cut = price.get('current_cut')
+                p_low = price.get('lowest')
+                shidi = is_lowest_str(price.get('is_lowest',0))
                 discount = f'-{p_cut}%'
             else:
                 shidi = '-'

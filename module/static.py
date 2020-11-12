@@ -3,12 +3,12 @@
 # @Author       : Chr_
 # @Date         : 2020-05-03 23:20:00
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-11 16:18:48
+# @LastEditTime : 2020-11-12 21:03:36
 # @Description  : 静态常量
 '''
 
 # 脚本版本
-SCRIPT_VERSION = '1.03'
+SCRIPT_VERSION = '1.09'
 
 # 缓存数据库名称
 DB_NAME = 'data.db'

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-11 20:10:54
+# @LastEditTime : 2020-11-12 17:30:18
 # @Description  : 一些公共函数
 '''
 
@@ -81,7 +81,7 @@ def dint(value: all, default: int = -1) -> int:
     '''
     try:
         r = int(value)
-    except ValueError:
+    except (ValueError,TypeError):
         r = default
     return r
 
@@ -134,8 +134,9 @@ def flist(value: all) -> int:
     '''
     value = dint(value, value)
 
-    nlist = []
     if value != -1:
         if isinstance(value, list):
-            for i in value:
-                nlist.append(str(i))
+            value = [str(x) for x in value]
+        else:
+            value = [str(value)]
+    return value

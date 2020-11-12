@@ -10,7 +10,7 @@
 import asyncio
 
 from module.config import get_config
-from module.crawer import crawer
+from module.crawer import Crawer
 from module.log import get_logger
 from module.version import check_update
 
@@ -21,7 +21,7 @@ async def main():
     cfg = get_config()
     if cfg:
         steamid = cfg['auto']['steamid'] or [input('请输入64位steam ID: ')]
-        c = crawer(cfg, steamid)
+        c = Crawer(cfg, steamid)
 
         tasks = [
             asyncio.create_task(check_update(cfg)),  # 异步检查更新

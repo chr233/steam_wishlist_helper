@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 05:08:57
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 17:43:38
+# @LastEditTime : 2020-11-12 18:16:38
 # @Description  : 对接Keylol的API【异步】
 '''
 
@@ -56,7 +56,7 @@ async def _get_game_tags(client: AsyncClient, appid: int) -> dict:
     result = {}
     if jd:
         result[appid] = {
-            'tags': set(jd.get('tags', []) + jd.get('genre', [])),
+            # 'tags': set(jd.get('tags', []) + jd.get('genre', [])),
             # 'categories': [(int(x[0]), x[1])for x in raw.get('categories', [])],
             'has_card': len(jd.get('card', [])) > 0,
             'description': jd.get('description', '')}

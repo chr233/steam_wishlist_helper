@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 20:17:38
+# @LastEditTime : 2020-11-12 18:28:30
 # @Description  : 输出Json文件
 '''
 from json import dumps
@@ -41,4 +41,4 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
         pass
     else:
         wishdict['error']=('游戏列表空,请检查过滤器设置以及是否将愿望单公开')
-    return dumps(wishdict)
+    return dumps(wishdict,ensure_ascii=False)

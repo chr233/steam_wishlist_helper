@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-09 17:57:43
+# @LastEditTime : 2020-11-12 18:40:53
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -128,7 +128,7 @@ async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> 
                 'priority': data.get('priority', 0),
                 'tags': data.get('tags', []),
                 'add_date': int(data.get('added', 0)),
-                'rank': int(data.get('rank', 0)),
+                # 'rank': int(data.get('rank', 0)),
                 'platform': (
                     data.get('win', 0) == 1,
                     data.get('mac', 0) == 1,

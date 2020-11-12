@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 15:01:57
+# @LastEditTime : 2020-11-12 18:24:47
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -17,7 +17,7 @@ from .sort import get_index
 from .filter import filter
 
 
-class crawer(object):
+class Crawer(object):
 
     wishdict = {}  # {appid: {游戏详情}}
     steamids = {}  # steam账号列表
@@ -144,7 +144,7 @@ class crawer(object):
                 try:
                     obj = wishdict[key]
                     add = additiondict[key]
-                    obj['tags'] = add['tags']
+                    # obj['tags'] = add['tags']
                     obj['has_card'] = add['has_card']
                     # obj['name_cn'] = add['name_cn']
                 except KeyError:
@@ -161,9 +161,9 @@ class crawer(object):
                 try:
                     plain = plaindict[key]
                     obj = wishdict[key]
-                    obj['has_card'] = additiondict[plain][0]
-                    obj['tags'] = None
-                    obj['name_cn'] = None
+                    obj['has_card'] = additiondict[plain]
+                    # obj['tags'] = None
+                    # obj['name_cn'] = None
                 except KeyError:
                     errors += 1
                     self.logger.debug(f'ID {key}处理失败')

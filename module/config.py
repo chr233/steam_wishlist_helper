@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-11 20:13:14
+# @LastEditTime : 2020-11-12 17:34:36
 # @Description  : 读取并验证配置
 '''
 
@@ -12,7 +12,7 @@ from os import getcwd, path
 import toml
 
 from .log import get_logger
-from .utils import dint, fint, fbool
+from .utils import dint, fint, fbool, flist
 from .static import SORT_TYPE
 
 logger = get_logger('Config')
@@ -204,7 +204,8 @@ def __verify_filter(filter: dict) -> dict:
     platform_mac = fbool(filter.get('platform_mac', -1))
     platform_linux = fbool(filter.get('platform_linux', -1))
 
-    # test=filter.get('test')
+    tags_include = flist(filter.get('tags_include', -1))
+    tags_exclude = flist(filter.get('tags_exclude', -1))
 
     filter = {
         'price_noset': price_noset,
@@ -224,8 +225,11 @@ def __verify_filter(filter: dict) -> dict:
         'review_count_higher': review_count_higher,
         'review_count_lower': review_count_lower,
 
-        'platform_windows':platform_windows,
-        'platform_mac':platform_mac,
-        'platform_linux':platform_linux,
+        'platform_windows': platform_windows,
+        'platform_mac': platform_mac,
+        'platform_linux': platform_linux,
+
+        'tags_include': tags_include,
+        'tags_exclude': tags_exclude
     }
     return (filter)

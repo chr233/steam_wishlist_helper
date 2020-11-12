@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 19:48:26
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 20:18:45
+# @LastEditTime : 2020-11-12 18:24:33
 # @Description  : 对接ITAD的API【异步】
 '''
 
@@ -284,7 +284,7 @@ async def _get_base_info(client: AsyncClient, params: dict, plains: list) -> dic
             data = {}
         for plain in data.keys():
             d = data[plain]
-            has_achi = d.get('achievements', False)
+            # has_achi = d.get('achievements', False)
             has_card = d.get('trading_cards', False)
-            infodict[plain] = (has_card, has_achi)
+            infodict[plain] = has_card
     return (infodict)

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 15:32:20
+# @LastEditTime : 2020-11-13 18:19:37
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -148,31 +148,23 @@ class Filter(object):
         '''
         过滤掉当前价格 高于 设定值的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now == -1:
+            return p_now <= self.price_lower
         else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            if p_now == -1:
-                return True
-            else:
-                return p_now <= self.price_lower
+            return True
 
     def __d_higher(self, d: dict) -> bool:
         '''
         过滤掉当前折扣 低于 设定值 的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now > 0:
+            return p_now >= self.discount_higher
         else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            if p_now == -1:
-                return True
-            else:
-                return p_now >= self.discount_higher
+            return True
 
     def __d_lower(self, d: dict) -> bool:
         '''
@@ -193,34 +185,34 @@ class Filter(object):
         '''
         过滤掉 未达到 史低和近史低的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
-        else:
-            price = d.get('price', {})
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now > 0:
             is_lowest = price.get('is_lowest', 0)
             return is_lowest != 0
+        else:
+            return True
 
     def __d_is_lowest(self, d: dict) -> bool:
         '''
         过滤掉 达到 史低的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
-        else:
-            price = d.get('price', {})
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now > 0:
             is_lowest = price.get('is_lowest', 0)
             return is_lowest == 1
+        else:
+            return True
 
     def __d_almost_lowest(self, d: dict) -> bool:
         '''
         过滤掉 达到 近史低的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
-        else:
-            price = d.get('price', {})
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now > 0:
             is_lowest = price.get('is_lowest', 0)
             return is_lowest == -1
+        else:
+            return True

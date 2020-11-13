@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 21:13:57
+# @LastEditTime : 2020-11-13 15:23:14
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -108,18 +108,23 @@ class Crawer(object):
                 self.logger.debug(f'未找到ID为{key}的plain,已忽略')
                 continue
 
-            try:
-                p_now, p_old, p_cut = current_dict[plain]
-            except KeyError:
-                # 没有当前价格数据
-                p_now, p_old, p_cut = -1, -1, 0
-            try:
-                p_low, p_low_cut, p_low_time = lowest_dict[plain]
-            except KeyError:
-                # 没有史低价格数据
-                p_low, p_low_cut, p_low_time = -1, 0, 0
-
             obj = wishlist[key]
+
+            if not obj['free']:
+                try:
+                    p_now, p_old, p_cut = current_dict[plain]
+                except KeyError:
+                    # 没有当前价格数据
+                    p_now, p_old, p_cut = -1, -1, 0
+                try:
+                    p_low, p_low_cut, p_low_time = lowest_dict[plain]
+                except KeyError:
+                    # 没有史低价格数据
+                    p_low, p_low_cut, p_low_time = -1, 0, 0
+            else:
+                #免费游戏
+                p_now, p_old, p_cut = 0, 0, 0
+                p_low, p_low_cut, p_low_time = 0, 0, 0
 
             obj['price'] = {
                 'current': p_now,

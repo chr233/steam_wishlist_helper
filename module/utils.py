@@ -3,14 +3,13 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:54:11
+# @LastEditTime : 2020-11-13 15:23:32
 # @Description  : 一些公共函数
 '''
 
 from os import path, makedirs, getcwd
-from math import ceil
 
-from .static import OP_PATH
+from .static import OP_PATH,ALMOST_LOWEST
 
 
 def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
@@ -27,13 +26,12 @@ def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
     if (cut > 0):
         if (current <= lowest):  # 史低
             return 1
-        elif ((current - lowest) < ceil(origin / 100)):  # 近史低
-
+        elif ((current - lowest) / origin <= ALMOST_LOWEST):  # 近史低
             return -1
     return 0
 
 
-def is_lowest_str(r:int) -> int:
+def is_lowest_str(r: int) -> int:
     '''
     检查价格是否为史低
 
@@ -78,7 +76,7 @@ def dint(value: all, default: int = -1) -> int:
     '''
     try:
         r = int(value)
-    except (ValueError,TypeError):
+    except (ValueError, TypeError):
         r = default
     return r
 

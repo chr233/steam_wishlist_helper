@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 17:34:36
+# @LastEditTime : 2020-11-13 14:19:18
 # @Description  : 读取并验证配置
 '''
 
@@ -183,6 +183,7 @@ def __verify_filter(filter: dict) -> dict:
     ''' 
     验证filter节
     '''
+    price_set = fbool(filter.get('price_set', -1))
     price_noset = fbool(filter.get('price_noset', -1))
     price_free = fbool(filter.get('price_free', -1))
     price_higher = fint(filter.get('price_higher', -1), 0)
@@ -190,7 +191,8 @@ def __verify_filter(filter: dict) -> dict:
 
     discount_higher = fint(filter.get('discount_higher', -1), 100)
     discount_lower = fint(filter.get('discount_lower', -1), 100)
-    discount_reach_lowest = fbool(filter.get('discount_reach_lowest', -1))
+    discount_not_lowest = fbool(filter.get('discount_not_lowest', -1))
+    discount_is_lowest = fbool(filter.get('discount_is_lowest', -1))
     discount_almost_lowest = fbool(filter.get('discount_almost_lowest', -1))
 
     review_score_higher = fint(filter.get('review_score_higher', -1), 9)
@@ -208,6 +210,7 @@ def __verify_filter(filter: dict) -> dict:
     tags_exclude = flist(filter.get('tags_exclude', -1))
 
     filter = {
+        'price_set': price_set,
         'price_noset': price_noset,
         'price_free': price_free,
         'price_higher': price_higher,
@@ -215,7 +218,8 @@ def __verify_filter(filter: dict) -> dict:
 
         'discount_higher': discount_higher,
         'discount_lower': discount_lower,
-        'discount_reach_lowest': discount_reach_lowest,
+        'discount_not_lowest': discount_not_lowest,
+        'discount_is_lowest': discount_is_lowest,
         'discount_almost_lowest': discount_almost_lowest,
 
         'review_score_higher': review_score_higher,

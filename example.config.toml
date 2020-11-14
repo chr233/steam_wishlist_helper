@@ -10,7 +10,7 @@ steamid = 0
 [other] # 其他设置
 # 是否在运行结束后显示等待屏幕, 如果是在终端中运行可以禁用
 # true: 显示等待屏幕, false: 不显示等待屏幕,直接退出
-wait_screen = false
+wait_screen = true
 
 [itad] # itad模块设置,用于获取价格信息
 # API Token, 必填

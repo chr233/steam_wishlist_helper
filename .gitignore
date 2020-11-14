@@ -6,3 +6,4 @@ output/
 build/
 release/
 test.py
+filter.toml

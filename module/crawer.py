@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 23:51:00
+# @LastEditTime : 2020-11-15 00:54:10
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -193,17 +193,17 @@ class Crawer(object):
         按照配置过滤愿望单
         '''
         wishdict = self.wishdict
-        setting = self.setting['output']
-        wishdict = game_filter(wishdict, setting)
-        self.wishdict = wishdict
+        filter = self.setting['filter']
+        # wishdict = game_filter(wishdict, filter)
+        # self.wishdict = wishdict
 
     def sort(self):
         '''
         按照配置过滤愿望单
         '''
         wishdict = self.wishdict
-        setting = self.setting['sort']
-        self.index = get_index(wishdict, setting)
+        sort = self.setting['sort']
+        self.index = get_index(wishdict, sort)
 
     def output(self):
         '''

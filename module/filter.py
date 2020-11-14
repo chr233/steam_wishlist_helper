@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-15 00:37:43
+# @LastEditTime : 2020-11-15 01:04:34
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -49,6 +49,9 @@ class Filter(object):
         '''
         def disable(x):
             return True
+        
+
+
         has_card = setting.get('has_card', -1)
 
         price_set = setting.get('price_set', -1)
@@ -394,3 +397,16 @@ class Filter(object):
 
     def __t_exclude(self, d: dict) -> bool:
         pass
+
+
+    def include(self, d: dict) -> bool:
+        itags = self.tags_include
+        tags = d.get('tags', [])
+        print(tags)
+        for it in itags:
+            flag = False
+            for t in tags:
+                if it in t:
+                    flag =True
+                    break
+            

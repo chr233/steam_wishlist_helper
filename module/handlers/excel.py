@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:57:49
+# @LastEditTime : 2020-11-14 14:41:31
 # @Description  : 输出Xlsx文件
 '''
 
@@ -96,9 +96,12 @@ def formater(wishdict: dict, index: list, symbol: str, wb: Workbook):
                 p_old = '-'
                 p_low = '-'
 
-            r_result = detail['review_result']
-            r_total = detail['review_total']
-            r_percent = detail['review_percent']
+
+            review = detail['review']
+            r_result = review['result']
+            r_total = review['total']
+            r_percent = review['percent']
+            # review_str = f'{r_result} ({r_total})'
 
             ws.write(col, 0, link)
             ws.write(col, 1, name)

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 23:57:15
+# @LastEditTime : 2020-11-14 14:37:26
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -117,10 +117,12 @@ async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> 
             wishlist[key] = {
                 'name': data.get('name', '【解析出错】'),
                 'picture': PIC_URL % key,
-                'review_score': review_score,
-                'review_result': Num2Review.get(review_score, 'Error'),
-                'review_total': int(data.get('reviews_total', '0').replace(',', '')),
-                'review_percent': int(data.get('reviews_percent', 0)),
+                'review': {
+                    'score': review_score,
+                    'result': Num2Review.get(review_score, 'Error'),
+                    'total': int(data.get('reviews_total', '0').replace(',', '')),
+                    'percent': int(data.get('reviews_percent', 0)),
+                },
                 'release_date': int(data.get('release_date', 0)),
                 'subs': [s['id'] for s in data.get('subs', [])],
                 'free': data.get('is_free_game', False),

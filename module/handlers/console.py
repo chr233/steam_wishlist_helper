@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-05 12:43:38
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:57:42
+# @LastEditTime : 2020-11-14 14:40:50
 # @Description  : 在控制台输出
 '''
 
@@ -51,7 +51,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> PrettyTable:
                 p_old = price.get('origion')
                 p_cut = price.get('current_cut')
                 p_low = price.get('lowest')
-                shidi = is_lowest_str(price.get('is_lowest',0))
+                shidi = is_lowest_str(price.get('is_lowest', 0))
                 discount = f'-{p_cut}%'
             else:
                 shidi = '-'
@@ -69,11 +69,12 @@ def formater(wishdict: dict, index: list, symbol: str) -> PrettyTable:
                 p_low = '-'
                 p_old = '-'
 
-            r_result = detail['review_result']
-            # r_total = detail['review_total']
-            # r_percent = detail['review_percent']
-            # review = f'{r_result} ({r_total})'
-            # review = f'{r_result} {r_percent}%好评/({r_total})'
+            review = detail['review']
+            r_result = review['result']
+            # r_total = review['total']
+            # r_percent = review['percent']
+            # review_str = f'{r_result} ({r_total})'
+            # review_str = f'{r_result} {r_percent}%好评/({r_total})'
             if '史低' in shidi:
                 table.add_row([name, has_card, p_now, p_old,
                                discount,  shidi, r_result])

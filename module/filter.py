@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:11:50
+# @LastEditTime : 2020-11-14 14:29:22
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -31,6 +31,8 @@ class Filter(object):
     price_lower = 0
     discount_higher = 0
     discount_lower = 0
+    review_score_higher = 0
+    review_score_lower = 0
 
     def __init__(self, setting: dict) -> None:
         '''
@@ -67,35 +69,44 @@ class Filter(object):
         tags_include = setting.get('tags_include', -1)
         tags_exclude = setting.get('tags_exclude', -1)
 
-        if price_set or price_set == -1:
+        if price_set or price_set == -1:  # 过滤有价格
             self.__p_set = disable
-        if price_noset or price_noset == -1:
+        if price_noset or price_noset == -1:  # 过滤无价格
             self.__p_noset = disable
-        if price_free or price_free == -1:
+        if price_free or price_free == -1:  # 过滤免费
             self.__p_free = disable
-        if price_higher == -1:
+        if price_higher == -1:  # 过滤价格低于
             self.__p_higher = disable
         else:
             self.price_higher = price_higher
-        if price_lower == -1:
+        if price_lower == -1:  # 过滤价格高于
             self.__p_lower = disable
         else:
             self.price_lower = price_lower
 
-        if discount_higher == -1:
+        if discount_higher == -1:  # 过滤折扣低于
             self.__d_higher = disable
         else:
             self.discount_higher = discount_higher
-        if discount_lower == -1:
+        if discount_lower == -1:  # 过滤折扣高于
             self.__d_lower = disable
         else:
             self.discount_lower = discount_lower
-        if discount_not_lowest or discount_not_lowest == -1:
+        if discount_not_lowest or discount_not_lowest == -1:  # 过滤非史低和非近史低
             self.__d_is_lowest = disable
-        if discount_is_lowest or discount_is_lowest == -1:
+        if discount_is_lowest or discount_is_lowest == -1:  # 过滤史低
             self.__d_not_lowest = disable
-        if discount_almost_lowest or discount_is_lowest == -1:
+        if discount_almost_lowest or discount_is_lowest == -1:  # 过滤近史低
             self.__d_almost_lowest = disable
+
+        if review_score_higher <= 0:  # 过滤评测等级低于
+            self.__r_score_higher = disable
+        else:
+            self.review_score_higher = review_score_higher
+        if review_score_lower <= 0:  # 过滤评测等级高于
+            self.__r_score_lower = disable
+        else:
+            self.review_score_lower = review_score_lower
 
     def filter(self, d: dict) -> bool:
         return self.__p_noset(d)
@@ -212,5 +223,16 @@ class Filter(object):
             is_lowest = price.get('is_lowest', 0)
             return is_lowest != -1  # 非史低或史低有效
 
-    def __r_score_higher(self,d:dict)->bool:
+    def __r_score_higher(self, d: dict) -> bool:
+        '''
+        忽略评价等级 = 0 的游戏
+        过滤掉评价等级 低于 设定值的游戏
+        '''
+        pass
+
+    def __r_score_lower(self, d: dict) -> bool:
+        '''
+        忽略评价等级 = 0 的游戏
+        过滤掉评价等级 高于 设定值的游戏
+        '''
         pass

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:57:15
+# @LastEditTime : 2020-11-14 14:41:04
 # @Description  : 输出BBCode格式的文件
 '''
 
@@ -70,11 +70,12 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
                 p_low = '-'
                 p_old = '-'
 
-            r_result = detail['review_result']
-            r_total = detail['review_total']
-            # r_percent = detail['review_percent']
-            review = f'{r_result} ({r_total})'
-            # review = f'{r_result} {r_percent}%好评/({r_total})'
+            review = detail['review']
+            r_result = review['result']
+            r_total = review['total']
+            # r_percent = review['percent']
+            review_str = f'{r_result} ({r_total})'
+            # review_str = f'{r_result} {r_percent}%好评/({r_total})'
 
             result.append((f'[tr][td][url={link}][img]{pic}[/img][/url][/td]'
                            f'[td][url={link}]{name}[/url][/td]'
@@ -84,7 +85,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
                            f'[td]{discount}[/td]'
                            f'[td]{p_low}[/td]'
                            f'[td]{shidi}[/td]'
-                           f'[td]{review}[/td][/tr]'))
+                           f'[td]{review_str}[/td][/tr]'))
         result.append('[/table]')
     else:
         result.append('游戏列表空,请检查过滤器设置以及是否将愿望单公开')

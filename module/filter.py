@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 21:13:37
+# @LastEditTime : 2020-11-15 00:37:43
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -35,6 +35,10 @@ class Filter(object):
     review_score_lower = 0
     review_percent_higher = 0
     review_percent_lower = 0
+    review_total_higher = 0
+    review_total_lower = 0
+    tags_include = []
+    tags_exclude = []
 
     def __init__(self, setting: dict) -> None:
         '''
@@ -45,6 +49,8 @@ class Filter(object):
         '''
         def disable(x):
             return True
+        has_card = setting.get('has_card', -1)
+
         price_set = setting.get('price_set', -1)
         price_noset = setting.get('price_noset', -1)
         price_free = setting.get('price_free', -1)
@@ -62,8 +68,8 @@ class Filter(object):
         review_no_result = setting.get('review_no_result', -1)
         review_percent_higher = setting.get('review_percent_higher', -1)
         review_percent_lower = setting.get('review_percent_lower', -1)
-        review_count_higher = setting.get('review_count_higher', -1)
-        review_count_lower = setting.get('review_count_lower', -1)
+        review_total_higher = setting.get('review_total_higher', -1)
+        review_total_lower = setting.get('review_total_lower', -1)
 
         platform_windows = setting.get('platform_windows', -1)
         platform_mac = setting.get('platform_mac', -1)
@@ -71,6 +77,9 @@ class Filter(object):
 
         tags_include = setting.get('tags_include', -1)
         tags_exclude = setting.get('tags_exclude', -1)
+
+        if not has_card or has_card == -1:  # 果过滤没有卡牌
+            self.__o_has_card = disable
 
         if price_set or price_set == -1:  # 过滤有价格
             self.__p_set = disable
@@ -102,6 +111,8 @@ class Filter(object):
         if discount_almost_lowest or discount_is_lowest == -1:  # 过滤近史低
             self.__d_almost_lowest = disable
 
+        if review_no_result or review_no_result == -1:  # 过滤无评测结果
+            self.__r_score_no_result = disable
         if review_score_higher <= 0:  # 过滤评测等级低于
             self.__r_score_higher = disable
         else:
@@ -110,19 +121,48 @@ class Filter(object):
             self.__r_score_lower = disable
         else:
             self.review_score_lower = review_score_lower
-        if review_no_result == -1:
-            self.__r_score_no_result = disable
-        if review_percent_higher or review_percent_higher == -1:
+        if review_percent_higher or review_percent_higher == -1:  # 过滤好评率低于
             self.__r_percent_higher = disable
         else:
             self.review_percent_higher = review_percent_higher
-        if review_percent_lower or review_percent_lower == -1:
+        if review_percent_lower or review_percent_lower == -1:  # 过滤好评率高于
             self.__r_percent_lower = disable
         else:
             self.review_percent_lower = review_percent_lower
+        if review_total_higher == -1:  # 过滤评测总数低于
+            self.__r_total_higher = disable
+        else:
+            self.review_total_higher = review_total_higher
+        if review_total_lower == -1:  # 过滤评测总数高于
+            self.__r_total_lower = disable
+        else:
+            self.review_total_lower = review_total_lower
+
+        if not platform_windows or platform_windows == -1:  # 过滤不支持win
+            self.__p_windoes = disable
+        if not platform_mac or platform_mac == -1:  # 过滤不支持mac
+            self.__p_mac = disable
+        if not platform_linux or platform_linux == -1:  # 过滤不支持linux
+            self.__p_linux = disable
+
+        if not tags_include or tags_include == -1:  # 过滤不包含指定标签
+            self.__t_include = disable
+        else:
+            self.tags_include = tags_include
+        if not tags_exclude or tags_exclude == -1:  # 过滤包含指定标签
+            self.__t_exclude = disable
+        else:
+            self.tags_exclude = tags_exclude
 
     def filter(self, d: dict) -> bool:
         return self.__p_noset(d)
+
+    def __o_has_card(self, d: dict) -> bool:
+        '''
+        过滤掉 没有 卡牌的游戏
+        '''
+        card = d.get('card', False)
+        return card  # 有卡有效
 
     def __p_set(self, d: dict) -> bool:
         '''
@@ -295,3 +335,62 @@ class Filter(object):
         else:
             percent = review.get('percent', -1)
             return percent <= self.review_percent_lower  # 评分低于设定有效
+
+    def __r_total_higher(self, d: dict) -> bool:
+        '''
+        过滤掉评价总数 低于 设定值的游戏
+        '''
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            total = review.get('total', -1)
+            return total >= self.review_total_higher  # 评分低于设定有效
+
+    def __r_total_lower(self, d: dict) -> bool:
+        '''
+        过滤掉评价总数 低于 设定值的游戏
+        '''
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            total = review.get('total', -1)
+            return total <= self.review_total_lower  # 评分低于设定有效
+
+    def __p_windoes(self, d: dict) -> bool:
+        '''
+        过滤掉 不支持 Windows的游戏
+        '''
+        windows, _, _ = d.get('platform', (False, False, False))
+        return windows
+
+    def __p_mac(self, d: dict) -> bool:
+        '''
+        过滤掉 不支持 Mac的游戏
+        '''
+        _, macos, _ = d.get('platform', (False, False, False))
+        return macos
+
+    def __p_linux(self, d: dict) -> bool:
+        '''
+        过滤掉 不支持 Linux的游戏
+        '''
+        _, _, linux = d.get('platform', (False, False, False))
+        return linux
+
+    def __t_include(self, d: dict) -> bool:
+        itags = self.tags_include
+        tags = d.get('tags', [])
+        for it in itags:
+            flag = False
+            for t in tags:
+                if it in t:
+                    pass
+
+    def __t_exclude(self, d: dict) -> bool:
+        pass

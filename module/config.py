@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 19:27:13
+# @LastEditTime : 2020-11-14 21:24:05
 # @Description  : 读取并验证配置
 '''
 
@@ -185,6 +185,8 @@ def __verify_filter(filter: dict) -> dict:
     ''' 
     验证filter节
     '''
+    has_card = fbool(filter.get('has_card', -1))
+
     price_set = fbool(filter.get('price_set', -1))
     price_noset = fbool(filter.get('price_noset', -1))
     price_free = fbool(filter.get('price_free', -1))
@@ -203,8 +205,8 @@ def __verify_filter(filter: dict) -> dict:
 
     review_percent_higher = fint(filter.get('review_percent_higher', -1), 100)
     review_percent_lower = fint(filter.get('review_percent_lower', -1), 100)
-    review_count_higher = fint(filter.get('review_count_higher', -1), 0)
-    review_count_lower = fint(filter.get('review_count_lower', -1), 0)
+    review_total_higher = fint(filter.get('review_total_higher', -1), 0)
+    review_total_lower = fint(filter.get('review_total_lower', -1), 0)
 
     platform_windows = fbool(filter.get('platform_windows', -1))
     platform_mac = fbool(filter.get('platform_mac', -1))
@@ -214,6 +216,8 @@ def __verify_filter(filter: dict) -> dict:
     tags_exclude = flist(filter.get('tags_exclude', -1))
 
     filter = {
+        'has_card': has_card,
+
         'price_set': price_set,
         'price_noset': price_noset,
         'price_free': price_free,
@@ -231,8 +235,8 @@ def __verify_filter(filter: dict) -> dict:
         'review_no_result': review_no_result,
         'review_percent_higher': review_percent_higher,
         'review_percent_lower': review_percent_lower,
-        'review_count_higher': review_count_higher,
-        'review_count_lower': review_count_lower,
+        'review_total_higher': review_total_higher,
+        'review_total_lower': review_total_lower,
 
         'platform_windows': platform_windows,
         'platform_mac': platform_mac,

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:41:31
+# @LastEditTime : 2020-11-14 23:48:51
 # @Description  : 输出Xlsx文件
 '''
 
@@ -70,7 +70,7 @@ def formater(wishdict: dict, index: list, symbol: str, wb: Workbook):
         for col, (appid, detail) in enumerate(wishdict.items(), 1):
             link = f'https://store.steampowered.com/app/{appid}'
             name = detail.get('name', '')
-            has_card = '有' if detail.get('has_card', False) else '无'
+            card = '有' if detail.get('card', False) else '无'
             # pic = detail.get('picture', '#')
             if 'price' in detail:
                 price = detail['price']
@@ -105,7 +105,7 @@ def formater(wishdict: dict, index: list, symbol: str, wb: Workbook):
 
             ws.write(col, 0, link)
             ws.write(col, 1, name)
-            ws.write(col, 2, has_card)
+            ws.write(col, 2, card)
             ws.write(col, 3, p_now)
             ws.write(col, 4, p_old)
             ws.write(col, 5, discount)

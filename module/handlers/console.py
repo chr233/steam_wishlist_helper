@@ -44,7 +44,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> PrettyTable:
             # link = f'https://store.steampowered.com/app/{appid}'
             name = str(detail.get('name', ''))
             # pic = detail.get('picture', '#')
-            has_card = '有' if detail.get('has_card', False) else '无'
+            card = '有' if detail.get('card', False) else '无'
             if 'price' in detail:
                 price = detail['price']
                 p_now = price.get('current')
@@ -76,7 +76,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> PrettyTable:
             # review_str = f'{r_result} ({r_total})'
             # review_str = f'{r_result} {r_percent}%好评/({r_total})'
             if '史低' in shidi:
-                table.add_row([name, has_card, p_now, p_old,
+                table.add_row([name, card, p_now, p_old,
                                discount,  shidi, r_result])
     else:
         table.add_row(['游戏列表空,请检查过滤器设置以及是否将愿望单公开', '', '', ''])

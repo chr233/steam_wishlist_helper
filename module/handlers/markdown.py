@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:41:53
+# @LastEditTime : 2020-11-14 23:49:15
 # @Description  : 输出Markdown文件
 '''
 
@@ -45,7 +45,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
             link = f'https://store.steampowered.com/app/{appid}'
             name = detail.get('name', '')
             pic = detail.get('picture', '#')
-            has_card = '有' if detail.get('has_card', False) else '无'
+            card = '有' if detail.get('card', False) else '无'
             if 'price' in detail:
                 price = detail['price']
                 p_now = price.get('current')
@@ -76,7 +76,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
             # r_percent = review['percent']
             review_str = f'{r_result} ({r_total})'
 
-            result.append((f'|[![]({pic})]({link})|[{name}]({link})|{has_card}|'
+            result.append((f'|[![]({pic})]({link})|[{name}]({link})|{card}|'
                            f'{p_now}|{p_old}|{discount}|{p_low}|{shidi}|{review_str}|'))
     else:
         result.append('游戏列表空,请检查过滤器设置以及是否将愿望单公开')

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:41:04
+# @LastEditTime : 2020-11-14 23:50:03
 # @Description  : 输出BBCode格式的文件
 '''
 
@@ -45,7 +45,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
             link = f'https://store.steampowered.com/app/{appid}'
             name = detail.get('name', '')
             pic = detail.get('picture', '#')
-            has_card = '有' if detail.get('has_card', False) else '无'
+            card = '有' if detail.get('card', False) else '无'
             if 'price' in detail:
                 price = detail['price']
                 p_now = price.get('current')
@@ -79,7 +79,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
 
             result.append((f'[tr][td][url={link}][img]{pic}[/img][/url][/td]'
                            f'[td][url={link}]{name}[/url][/td]'
-                           f'[td]{has_card}[/td]'
+                           f'[td]{card}[/td]'
                            f'[td]{p_now}[/td]'
                            f'[td]{p_old}[/td]'
                            f'[td]{discount}[/td]'

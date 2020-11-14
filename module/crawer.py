@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:15:08
+# @LastEditTime : 2020-11-14 23:51:00
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -162,7 +162,7 @@ class Crawer(object):
                     obj = wishdict[key]
                     add = additiondict[key]
                     # obj['tags'] = add['tags']
-                    obj['has_card'] = add['has_card']
+                    obj['card'] = add['card']
                     # obj['name_cn'] = add['name_cn']
                 except KeyError:
                     errors += 1
@@ -178,7 +178,7 @@ class Crawer(object):
                 try:
                     plain = plaindict[key]
                     obj = wishdict[key]
-                    obj['has_card'] = additiondict[plain]
+                    obj['card'] = additiondict[plain]
                     # obj['tags'] = None
                     # obj['name_cn'] = None
                 except KeyError:

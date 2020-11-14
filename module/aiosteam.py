@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-21 15:41:24
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:37:26
+# @LastEditTime : 2020-11-14 23:58:09
 # @Description  : 读取Steam愿望单信息【异步】
 '''
 
@@ -136,7 +136,8 @@ async def _get_single_page(client: AsyncClient, steamid: int, page: int = 0) -> 
                     data.get('win', 0) == 1,
                     data.get('mac', 0) == 1,
                     data.get('linux', 0) == 1
-                )
+                ),
+                "card": False
             }
             if wishlist[key]['name'] == '【解析出错】':
                 logger.debug(f'数据解析失败 {data}')

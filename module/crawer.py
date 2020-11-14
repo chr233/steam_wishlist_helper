@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-15 03:04:14
+# @LastEditTime : 2020-11-15 03:08:44
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -196,6 +196,8 @@ class Crawer(object):
         filter = self.setting['filter']
         f = Filter(filter)
         wishdict = {k: v for k, v in wishdict.items() if f.filter(v)}
+        self.logger.info(f'过滤后共有{len(wishdict)}个游戏')
+        self.wishdict = wishdict
 
     def sort(self):
         '''

@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 14:19:18
+# @LastEditTime : 2020-11-14 14:13:40
 # @Description  : 读取并验证配置
 '''
 
@@ -158,12 +158,14 @@ def __verify_output(output: dict) -> dict:
     '''
     验证output节
     '''
-    console = bool(output.get('console', True))
-    markdown = bool(output.get('markdown', False))
+    console = bool(output.get('console', False))
+    markdown = bool(output.get('markdown', True))
     xlsx = bool(output.get('xlsx', True))
     bbcode = bool(output.get('bbcode', False))
+    json = bool(output.get('json', False))
+
     output = {'console': console, 'markdown': markdown,
-              'xlsx': xlsx, 'bbcode': bbcode}
+              'xlsx': xlsx, 'bbcode': bbcode, 'json': json}
     return (output)
 
 

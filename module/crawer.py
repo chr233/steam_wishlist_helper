@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 13:38:19
+# @LastEditTime : 2020-11-14 14:15:08
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -12,7 +12,7 @@ from .log import get_logger
 from .aiosteam import get_wishlish
 from .aioitad import get_plains, get_lowest_price, get_current_price, get_base_info
 from .aiokeylol import get_games_tags
-from .handlers import bbcode, markdown, excel  # , console
+from .handlers import bbcode, markdown, excel, json  # , console
 from .sort import get_index
 from .filter import game_filter
 from .utils import is_lowest
@@ -122,7 +122,7 @@ class Crawer(object):
                     # 没有史低价格数据
                     p_low, p_low_cut, p_low_time = -1, 0, 0
             else:
-                #免费游戏
+                # 免费游戏
                 p_now, p_old, p_cut = 0, 0, 0
                 p_low, p_low_cut, p_low_time = 0, 0, 0
 
@@ -218,6 +218,7 @@ class Crawer(object):
         md = setting.get('markdown', False)
         xlsx = setting.get('xlsx', False)
         bbc = setting.get('bbcode', False)
+        jsn = setting.get('json', False)
 
         if not index:
             index = wishdict.keys()
@@ -242,6 +243,11 @@ class Crawer(object):
             try:
                 self.logger.warning('因为打包程序有问题,暂时禁用控制台输出的功能')
                 # console.handler(wishdict, index, symbol)
+            except Exception as e:
+                self.logger.error(f'遇到错误: {e}')
+        if jsn:
+            try:
+                json.handler(wishdict, index, symbol)
             except Exception as e:
                 self.logger.error(f'遇到错误: {e}')
 

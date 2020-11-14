@@ -3,9 +3,12 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 13:51:51
+# @LastEditTime : 2020-11-14 14:11:50
 # @Description  : 过滤器模块【TODO】
 '''
+
+
+from os import truncate
 
 
 def game_filter(wishdict: dict, setting: dict) -> dict:
@@ -124,63 +127,66 @@ class Filter(object):
 
     def __p_higher(self, d: dict) -> bool:
         '''
+        忽略免费和无价格的游戏
         过滤掉当前价格 低于 设定值的游戏
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
         if p_now <= -0:
-            return True
+            return True  # 忽略免费或无价格
         else:
-            return p_now >= self.price_higher
+            return p_now >= self.price_higher  # 价格高于设定有效
 
     def __p_lower(self, d: dict) -> bool:
         '''
+        忽略免费和无价格的游戏
         过滤掉当前价格 高于 设定值的游戏
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
         if p_now <= 0:
-            return True
+            return True  # 忽略免费或无价格
         else:
-            return p_now <= self.price_lower
+            return p_now <= self.price_lower  # 价格低于设定有效
 
     def __d_higher(self, d: dict) -> bool:
         '''
+        忽略免费和没有价格的游戏
         过滤掉当前折扣 低于 设定值 的游戏
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
-        if p_now > 0:
-            return p_now >= self.discount_higher
+        if p_now <= 0:
+            return True  # 忽略免费或无价格
         else:
-            return True
+            p_cut = price.get('current_cut', -1)
+            return p_cut >= self.discount_higher  # 折扣高于设定有效
 
     def __d_lower(self, d: dict) -> bool:
         '''
+        忽略免费和没有价格的游戏
         过滤掉当前折扣 高于 设定值 的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now <= 0:
+            return True  # 忽略免费或无价格
         else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            if p_now == -1:
-                return True
-            else:
-                return p_now <= self.discount_lower
+            p_cut = price.get('current_cut', -1)
+            return p_cut <= self.discount_lower  # 折扣低于设定有效
 
     def __d_not_lowest(self, d: dict) -> bool:
         '''
+        忽略免费和没有价格的游戏
         过滤掉 未达到 史低和近史低的游戏
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
-        if p_now > 0:
-            is_lowest = price.get('is_lowest', 0)
-            return is_lowest != 0
+        if p_now <= 0:
+            return True  # 忽略免费或无价格
         else:
-            return True
+            is_lowest = price.get('is_lowest', 0)
+            return is_lowest != 0  # 史低或近史低有效
 
     def __d_is_lowest(self, d: dict) -> bool:
         '''
@@ -188,11 +194,11 @@ class Filter(object):
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
-        if p_now > 0:
-            is_lowest = price.get('is_lowest', 0)
-            return is_lowest == 1
+        if p_now <= 0:
+            return True  # 忽略免费或无价格
         else:
-            return True
+            is_lowest = price.get('is_lowest', 0)
+            return is_lowest != 1  # 非史低或近史低有效
 
     def __d_almost_lowest(self, d: dict) -> bool:
         '''
@@ -200,8 +206,11 @@ class Filter(object):
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
-        if p_now > 0:
-            is_lowest = price.get('is_lowest', 0)
-            return is_lowest == -1
+        if p_now <= 0:
+            return True  # 忽略免费或无价格
         else:
-            return True
+            is_lowest = price.get('is_lowest', 0)
+            return is_lowest != -1  # 非史低或史低有效
+
+    def __r_score_higher(self,d:dict)->bool:
+        pass

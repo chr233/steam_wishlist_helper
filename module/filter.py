@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 18:19:37
+# @LastEditTime : 2020-11-14 13:51:51
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -99,50 +99,39 @@ class Filter(object):
 
     def __p_set(self, d: dict) -> bool:
         '''
+        忽略免费游戏
         过滤掉 有价格 的游戏
         '''
-        free = d.get('free', False)
-
-        if free:
-            return True
-        else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            return p_now == -1
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        return p_now <= 0  # 免费或者无价格有效
 
     def __p_noset(self, d: dict) -> bool:
         '''
+        忽略免费游戏
         过滤掉 没有价格 的游戏
         '''
-        free = d.get('free', False)
-        if free:
-            return True
-        else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            return p_now != -1
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        return p_now >= 0  # 免费或者有价格有效
 
     def __p_free(self, d: dict) -> bool:
         '''
         过滤掉 免费 的游戏
         '''
         free = d.get('free', False)
-        return free
+        return not free  # 非免费有效
 
     def __p_higher(self, d: dict) -> bool:
         '''
         过滤掉当前价格 低于 设定值的游戏
         '''
-        free = d.get('free', False)
-        if free:
+        price = d.get('price', {})
+        p_now = price.get('current', -1)
+        if p_now <= -0:
             return True
         else:
-            price = d.get('price', {})
-            p_now = price.get('current', -1)
-            if p_now == -1:
-                return True
-            else:
-                return p_now >= self.price_higher
+            return p_now >= self.price_higher
 
     def __p_lower(self, d: dict) -> bool:
         '''
@@ -150,10 +139,10 @@ class Filter(object):
         '''
         price = d.get('price', {})
         p_now = price.get('current', -1)
-        if p_now == -1:
-            return p_now <= self.price_lower
-        else:
+        if p_now <= 0:
             return True
+        else:
+            return p_now <= self.price_lower
 
     def __d_higher(self, d: dict) -> bool:
         '''

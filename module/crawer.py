@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 15:23:14
+# @LastEditTime : 2020-11-14 13:38:19
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -52,7 +52,7 @@ class Crawer(object):
             await self.get_wishlist()
             await self.add_price()
             await self.add_addition()
-            self.filter()
+            # self.filter()
             # self.sort()
             self.output()
 

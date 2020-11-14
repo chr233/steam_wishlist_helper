@@ -141,7 +141,7 @@ discount_almost_lowest = -1
 # 6-9:多半好评,好评,特别好评,好评如潮
 
 # false:过滤掉 评价等级 = 0 的游戏, true:不过滤, -1: 禁用
-review_no_result = -1
+review_no_score = -1
 
 # 下面的过滤器都会 忽略 评测数量不足 的游戏
 

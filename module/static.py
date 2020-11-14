@@ -3,12 +3,12 @@
 # @Author       : Chr_
 # @Date         : 2020-05-03 23:20:00
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 15:22:21
+# @LastEditTime : 2020-11-15 02:34:21
 # @Description  : 静态常量
 '''
 
 # 脚本版本
-SCRIPT_VERSION = '1.09'
+SCRIPT_VERSION = '1.10'
 
 # 缓存数据库名称
 DB_NAME = 'data.db'
@@ -26,7 +26,8 @@ TIMEOUT = 10
 TREAD_CD = 0.8
 
 # 近史低标准
-ALMOST_LOWEST = 0.15
+ALMOST_LOWEST = 0.05
+
 
 class URLs():
     '''

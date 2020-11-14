@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 21:24:05
+# @LastEditTime : 2020-11-15 02:38:55
 # @Description  : 读取并验证配置
 '''
 
@@ -193,6 +193,7 @@ def __verify_filter(filter: dict) -> dict:
     price_higher = fint(filter.get('price_higher', -1), 0)
     price_lower = fint(filter.get('price_lower', -1), 0)
 
+    discount_no = fbool(filter.get('discount_no', -1))
     discount_higher = fint(filter.get('discount_higher', -1), 100)
     discount_lower = fint(filter.get('discount_lower', -1), 100)
     discount_not_lowest = fbool(filter.get('discount_not_lowest', -1))
@@ -201,7 +202,7 @@ def __verify_filter(filter: dict) -> dict:
 
     review_score_higher = fint(filter.get('review_score_higher', -1), 9)
     review_score_lower = fint(filter.get('review_score_lower', -1), 9)
-    review_no_result = fbool(filter.get('review_no_result', -1))
+    review_no_score = fbool(filter.get('review_no_score', -1))
 
     review_percent_higher = fint(filter.get('review_percent_higher', -1), 100)
     review_percent_lower = fint(filter.get('review_percent_lower', -1), 100)
@@ -212,6 +213,7 @@ def __verify_filter(filter: dict) -> dict:
     platform_mac = fbool(filter.get('platform_mac', -1))
     platform_linux = fbool(filter.get('platform_linux', -1))
 
+    tags_enpty = fbool(filter.get('tags_enpty', -1))
     tags_include = flist(filter.get('tags_include', -1))
     tags_exclude = flist(filter.get('tags_exclude', -1))
 
@@ -224,6 +226,7 @@ def __verify_filter(filter: dict) -> dict:
         'price_higher': price_higher,
         'price_lower': price_lower,
 
+        'discount_no': discount_no,
         'discount_higher': discount_higher,
         'discount_lower': discount_lower,
         'discount_not_lowest': discount_not_lowest,
@@ -232,7 +235,7 @@ def __verify_filter(filter: dict) -> dict:
 
         'review_score_higher': review_score_higher,
         'review_score_lower': review_score_lower,
-        'review_no_result': review_no_result,
+        'review_no_score': review_no_score,
         'review_percent_higher': review_percent_higher,
         'review_percent_lower': review_percent_lower,
         'review_total_higher': review_total_higher,
@@ -242,6 +245,7 @@ def __verify_filter(filter: dict) -> dict:
         'platform_mac': platform_mac,
         'platform_linux': platform_linux,
 
+        'tags_enpty': tags_enpty,
         'tags_include': tags_include,
         'tags_exclude': tags_exclude
     }

@@ -3,13 +3,13 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 18:16:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-13 15:23:32
+# @LastEditTime : 2020-11-15 02:34:13
 # @Description  : 一些公共函数
 '''
 
 from os import path, makedirs, getcwd
 
-from .static import OP_PATH,ALMOST_LOWEST
+from .static import OP_PATH, ALMOST_LOWEST
 
 
 def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
@@ -26,7 +26,7 @@ def is_lowest(origin: int, current: int, lowest: int, cut: int) -> int:
     if (cut > 0):
         if (current <= lowest):  # 史低
             return 1
-        elif ((current - lowest) / origin <= ALMOST_LOWEST):  # 近史低
+        elif ((current - lowest) / origin <= ALMOST_LOWEST): # 近史低
             return -1
     return 0
 

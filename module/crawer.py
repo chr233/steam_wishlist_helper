@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-02 20:56:28
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-15 00:54:10
+# @LastEditTime : 2020-11-15 03:04:14
 # @Description  : 抓取模块
 '''
 from asyncio import Semaphore
@@ -14,7 +14,7 @@ from .aioitad import get_plains, get_lowest_price, get_current_price, get_base_i
 from .aiokeylol import get_games_tags
 from .handlers import bbcode, markdown, excel, json  # , console
 from .sort import get_index
-from .filter import game_filter
+from .filter import Filter
 from .utils import is_lowest
 
 
@@ -52,7 +52,7 @@ class Crawer(object):
             await self.get_wishlist()
             await self.add_price()
             await self.add_addition()
-            # self.filter()
+            self.filter()
             # self.sort()
             self.output()
 
@@ -194,8 +194,8 @@ class Crawer(object):
         '''
         wishdict = self.wishdict
         filter = self.setting['filter']
-        # wishdict = game_filter(wishdict, filter)
-        # self.wishdict = wishdict
+        f = Filter(filter)
+        wishdict = {k: v for k, v in wishdict.items() if f.filter(v)}
 
     def sort(self):
         '''

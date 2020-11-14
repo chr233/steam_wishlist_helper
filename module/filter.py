@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-11-07 21:12:39
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:29:22
+# @LastEditTime : 2020-11-14 21:13:37
 # @Description  : 过滤器模块【TODO】
 '''
 
@@ -33,6 +33,8 @@ class Filter(object):
     discount_lower = 0
     review_score_higher = 0
     review_score_lower = 0
+    review_percent_higher = 0
+    review_percent_lower = 0
 
     def __init__(self, setting: dict) -> None:
         '''
@@ -57,6 +59,7 @@ class Filter(object):
 
         review_score_higher = setting.get('review_score_higher', -1)
         review_score_lower = setting.get('review_score_lower', -1)
+        review_no_result = setting.get('review_no_result', -1)
         review_percent_higher = setting.get('review_percent_higher', -1)
         review_percent_lower = setting.get('review_percent_lower', -1)
         review_count_higher = setting.get('review_count_higher', -1)
@@ -93,9 +96,9 @@ class Filter(object):
         else:
             self.discount_lower = discount_lower
         if discount_not_lowest or discount_not_lowest == -1:  # 过滤非史低和非近史低
-            self.__d_is_lowest = disable
-        if discount_is_lowest or discount_is_lowest == -1:  # 过滤史低
             self.__d_not_lowest = disable
+        if discount_is_lowest or discount_is_lowest == -1:  # 过滤史低
+            self.__d_is_lowest = disable
         if discount_almost_lowest or discount_is_lowest == -1:  # 过滤近史低
             self.__d_almost_lowest = disable
 
@@ -107,6 +110,16 @@ class Filter(object):
             self.__r_score_lower = disable
         else:
             self.review_score_lower = review_score_lower
+        if review_no_result == -1:
+            self.__r_score_no_result = disable
+        if review_percent_higher or review_percent_higher == -1:
+            self.__r_percent_higher = disable
+        else:
+            self.review_percent_higher = review_percent_higher
+        if review_percent_lower or review_percent_lower == -1:
+            self.__r_percent_lower = disable
+        else:
+            self.review_percent_lower = review_percent_lower
 
     def filter(self, d: dict) -> bool:
         return self.__p_noset(d)
@@ -228,11 +241,57 @@ class Filter(object):
         忽略评价等级 = 0 的游戏
         过滤掉评价等级 低于 设定值的游戏
         '''
-        pass
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            return score >= self.review_score_higher  # 评分高于设定有效
 
     def __r_score_lower(self, d: dict) -> bool:
         '''
         忽略评价等级 = 0 的游戏
         过滤掉评价等级 高于 设定值的游戏
         '''
-        pass
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            return score <= self.review_score_lower  # 评分低于设定有效
+
+    def __r_score_no_result(self, d: dict) -> bool:
+        '''
+        过滤掉 评价等级 = 0 的游戏
+        '''
+        review = d.get('review', {})
+        score = review.get('result', -1)
+        return score <= 0  # 评分低于0有效
+
+    def __r_percent_higher(self, d: dict) -> bool:
+        '''
+        过滤掉好评率 低于 设定值的游戏
+        '''
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            percent = review.get('percent', -1)
+            return percent >= self.review_percent_higher  # 评分低于设定有效
+
+    def __r_percent_lower(self, d: dict) -> bool:
+        '''
+        过滤掉好评率 低于 设定值的游戏
+        '''
+        review = d.get('review', {})
+        score = review.get('result', -1)
+
+        if score <= 0:
+            return True  # 忽略没评价或出错
+        else:
+            percent = review.get('percent', -1)
+            return percent <= self.review_percent_lower  # 评分低于设定有效

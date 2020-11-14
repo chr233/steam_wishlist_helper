@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-06-30 17:32:56
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 14:22:18
+# @LastEditTime : 2020-11-14 19:27:13
 # @Description  : 读取并验证配置
 '''
 
@@ -199,6 +199,8 @@ def __verify_filter(filter: dict) -> dict:
 
     review_score_higher = fint(filter.get('review_score_higher', -1), 9)
     review_score_lower = fint(filter.get('review_score_lower', -1), 9)
+    review_no_result = fbool(filter.get('review_no_result', -1))
+
     review_percent_higher = fint(filter.get('review_percent_higher', -1), 100)
     review_percent_lower = fint(filter.get('review_percent_lower', -1), 100)
     review_count_higher = fint(filter.get('review_count_higher', -1), 0)
@@ -226,6 +228,7 @@ def __verify_filter(filter: dict) -> dict:
 
         'review_score_higher': review_score_higher,
         'review_score_lower': review_score_lower,
+        'review_no_result': review_no_result,
         'review_percent_higher': review_percent_higher,
         'review_percent_lower': review_percent_lower,
         'review_count_higher': review_count_higher,

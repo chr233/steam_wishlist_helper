@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-08 19:48:26
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:24:33
+# @LastEditTime : 2020-11-16 18:16:20
 # @Description  : 对接ITAD的API【异步】
 '''
 
@@ -219,7 +219,7 @@ async def _get_lowest_price(client: AsyncClient, params: dict, plains: list) -> 
         try:
             data = resp.json().get('data', {})
         except (JSONDecodeError, AttributeError):
-            logger.error(f'json解析失败')
+            logger.error('json解析失败')
             data = {}
         for plain in data.keys():
             d = data[plain]

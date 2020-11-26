@@ -3,11 +3,10 @@
 # @Author       : Chr_
 # @Date         : 2020-11-08 10:11:20
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-10 10:56:25
+# @LastEditTime : 2020-11-26 16:02:20
 # @Description  : 版本管理
 '''
 
-from re import split
 from httpx import AsyncClient
 from typing import Tuple
 

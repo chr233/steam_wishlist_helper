@@ -49,7 +49,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
             if 'price' in detail:
                 price = detail['price']
                 p_now = price.get('current')
-                p_old = price.get('origion')
+                p_old = price.get('origin')
                 p_cut = price.get('current_cut')
                 p_low = price.get('lowest')
                 shidi = is_lowest_str(price.get('is_lowest', 0))

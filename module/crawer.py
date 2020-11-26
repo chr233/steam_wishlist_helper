@@ -136,7 +136,7 @@ class Crawer(object):
                 'is_lowest': is_lowest(p_old, p_now, p_low, p_cut)
             }
             # obj['price_current'] = p_now
-            # obj['price_origion'] = p_old
+            # obj['price_origin'] = p_old
             # obj['price_cut'] = p_cut
             # obj['price_lowest'] = p_low
             # obj['price_low_cut'] = p_low_cut

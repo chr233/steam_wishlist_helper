@@ -3,13 +3,13 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-12 18:28:30
+# @LastEditTime : 2020-11-26 16:00:05
 # @Description  : 输出Json文件
 '''
 from json import dumps
 
 from ..log import get_logger
-from ..utils import is_lowest_str, get_output_path
+from ..utils import get_output_path
 
 logger = get_logger('Markdown')
 

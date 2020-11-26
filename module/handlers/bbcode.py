@@ -3,7 +3,7 @@
 # @Author       : Chr_
 # @Date         : 2020-07-06 18:22:37
 # @LastEditors  : Chr_
-# @LastEditTime : 2020-11-14 23:50:03
+# @LastEditTime : 2020-11-26 16:01:47
 # @Description  : 输出BBCode格式的文件
 '''
 
@@ -49,7 +49,7 @@ def formater(wishdict: dict, index: list, symbol: str) -> str:
             if 'price' in detail:
                 price = detail['price']
                 p_now = price.get('current')
-                p_old = price.get('origion')
+                p_old = price.get('origin')
                 p_cut = price.get('current_cut')
                 p_low = price.get('lowest')
                 shidi = is_lowest_str(price.get('is_lowest',0))

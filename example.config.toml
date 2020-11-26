@@ -29,8 +29,7 @@ currency_symbol = '¥'
 # true:启用, false:禁用
 enable = false
 
-[steam]
-# Steam网页端语言选项
+[steam] # Steam网页端语言选项
 # schinese代表简中, english代表英文
 language = "schinese"
 # 是否使用小尺寸的游戏图片,改为false将会使用大一些的图片
@@ -43,8 +42,6 @@ proxy = false
 # proxy = 'http://127.0.0.1:1081'
 
 [output] #输出配置
-columns = ['']
-
 # 直接在控制台显示
 console = true # 打包出了点问题暂时不可用
 
